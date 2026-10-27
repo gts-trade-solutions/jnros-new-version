@@ -9,8 +9,8 @@ import { EASE } from "@/lib/motion";
 let hydrated = false;
 
 /**
- * Re-mounts on every navigation. Tells the transition layer the new page is in the DOM (so the
- * green panel can wipe away) and fades client-side navigations in.
+ * Re-mounts on every navigation. Fades client-side navigations in (quickly: the new page should
+ * appear at once) and tells PageTransition the new page is in the DOM, so it can reset the scroll.
  *
  * Opacity only: a transform on this wrapper would become the containing block for every
  * position: fixed descendant and break GSAP-pinned sections.
@@ -25,7 +25,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
   }, [onPageMount]);
 
   return (
-    <motion.div initial={first ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, ease: EASE }}>
+    <motion.div initial={first ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35, ease: EASE }}>
       {children}
     </motion.div>
   );

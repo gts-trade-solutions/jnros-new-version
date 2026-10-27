@@ -38,10 +38,13 @@ hooks/                    useMediaQuery, useReducedMotion, useIdleGSAP
 lib/
   data.ts                 ALL content: solutions, services, home / about copy, nav, site details
   images.ts               photo helper for /public/images
+  image-loader.ts         next/image loader for the pre-built WebP sizes (widths in image-widths.json)
   seo.ts                  metadata builder + JSON-LD (LocalBusiness, Service, BreadcrumbList)
   schemas.ts              zod schema shared by the contact form and its server action
   gsap.ts  motion.ts      animation setup and the shared easing / duration / media-query constants
 public/images/            photography from jnroslogistics.com
+public/img/               generated WebP sizes (scripts/optimize-images.mjs, not committed)
+scripts/                  optimize-images.mjs
 ```
 
 Pages are server components. Anything interactive or animated is a `"use client"` leaf component, so all text is in the server-rendered HTML.
@@ -58,6 +61,8 @@ Pages, the sitemap and the JSON-LD all read from it. Add content only when it is
 
 **Photography** lives in `public/images/`; the `photo(file, alt, width, height)` helper records each file's real size so `next/image` knows its aspect ratio.
 
+**Image sizes are pre-built.** `npm run dev` and `npm run build` first run `scripts/optimize-images.mjs`, which writes every width `next/image` can request (from `lib/image-widths.json`) as a static WebP in `public/img/`. `lib/image-loader.ts` points `<Image>` at those files, so photos are plain CDN files from the first visit. On-demand optimization took 0.4–1.2s the first time each size was requested. The script is incremental, so after adding or replacing a photo it only encodes that one.
+
 **Old URLs.** `next.config.ts` permanently redirects the WordPress site's URLs (`/about-us`, `/contact-us`, `/odc-cargo-shipping`, …) to their new paths.
 
 ## Theme
@@ -70,7 +75,7 @@ Light by default: the tokens are on `:root` in `app/globals.css` (`--bg`, `--sur
 
 | What | Tool | Where |
 |---|---|---|
-| Page transition: green panel wipe (the next page loads during the wipe), then fade, under 1s | Motion `AnimatePresence` + `template.tsx` | `layout/PageTransition.tsx` |
+| Page change: instant swap (pages are prefetched) and a 0.35s fade, no covering panel | Motion + `template.tsx` | `app/template.tsx`, `layout/PageTransition.tsx` (scroll reset under Lenis) |
 | Header hide/show and shrink, mega menu, mobile menu | Motion | `layout/Header.tsx`, `MegaMenu.tsx`, `MobileMenu.tsx` |
 | Hero intros (home and inner pages), Ken Burns, slide timer | CSS keyframes (compositor), no wait for JavaScript | `globals.css` (`.hero-line`, `animate-kenburns`) |
 | Scroll reveals (split text, fade/clip groups, image wipes) | CSS start state + IntersectionObserver + GSAP tween | `ui/Reveal.tsx`, `ui/SplitText.tsx`, `ui/RevealImage.tsx` |

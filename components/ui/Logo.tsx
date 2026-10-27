@@ -1,12 +1,11 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import emblem from "@/public/brand/jnros-emblem.png";
 import wordmark from "@/public/brand/jnros-wordmark.png";
 
 /** The Jnros emblem: the badge illustration in a white disc. Decorative: always sits next to or inside labelled UI. */
 export function LogoMark({ className }: { className?: string }) {
-  // Eager (and one fixed size) so the header's copy warms the cache for the page-transition wipe, which mounts on demand.
-  return <Image src={emblem} alt="" sizes="96px" loading="eager" className={className} />;
+  // Eager: it is in the header, above the fold, on every page.
+  return <Image src="/brand/jnros-emblem.png" alt="" width={512} height={512} sizes="96px" loading="eager" className={className} />;
 }
 
 /**

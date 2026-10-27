@@ -97,7 +97,8 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  // Back/forward navigations skip the page transition; re-measure the new page's triggers.
+  // Navigations PageTransition doesn't handle (back/forward, and all of them without Lenis):
+  // re-measure the new page's triggers.
   useEffect(() => {
     if (firstRoute.current) {
       firstRoute.current = false;

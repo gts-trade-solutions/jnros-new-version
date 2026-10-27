@@ -39,15 +39,17 @@ export function Hero({ eyebrow, lines, intro, slides }: Props) {
   const inView = useInView(root, { amount: 0.05 });
   const playState = { animationPlayState: inView ? "running" : "paused" } as const;
 
-  // Only the first photo is needed for the first paint; the rest load once the page is idle
-  // (well before the 7s mark when the second slide comes in).
-  const [loadAll, setLoadAll] = useState(false);
-  useEffect(() => whenIdle(() => setLoadAll(true)), []);
+  // Photos load one slide ahead: only the first is needed for the first paint, the second loads
+  // once the page is idle, and each later one when the slide before it comes in (7s before it is
+  // shown). The first seconds of a visit don't spend bandwidth on photos that aren't on screen.
+  const [loadedUpTo, setLoadedUpTo] = useState(0);
+  useEffect(() => whenIdle(() => setLoadedUpTo((n) => Math.max(n, 1))), []);
 
   const show = (index: number) => {
     if (index === active) return;
     setPrevious(active);
     setActive(index);
+    setLoadedUpTo((n) => Math.max(n, index + 1));
   };
 
   // Scroll parallax: set up in an idle task (ScrollTriggers measure layout).
@@ -93,7 +95,7 @@ export function Hero({ eyebrow, lines, intro, slides }: Props) {
               className={cn("absolute inset-0 will-change-transform", (i === active || i === previous) && "motion-safe:animate-kenburns")}
               style={playState}
             >
-              {(i === 0 || loadAll) && (
+              {i <= loadedUpTo && (
                 <Image
                   src={slide.image.src}
                   alt={slide.image.alt}
