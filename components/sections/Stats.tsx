@@ -8,24 +8,24 @@ const cellBorders = ["", "border-l", "border-t lg:border-t-0 lg:border-l", "bord
 /** Four headline numbers that count up when scrolled into view (see <Counter>). */
 export function Stats() {
   return (
-    <section id="stats" aria-label="Jnros by the numbers" className="relative border-b border-border bg-surface">
+    <section id="stats" aria-label="Jnros Logistics in numbers" className="relative border-b border-border bg-surface">
       <div className="container-x">
         <dl className="-mx-5 grid grid-cols-2 sm:-mx-8 lg:grid-cols-4">
-          {stats.map((s, i) => {
-            const safety = i === stats.length - 1;
-            return (
-              <div key={s.label} className={cn("flex flex-col border-border px-5 py-10 sm:px-8 sm:py-14 lg:py-16", cellBorders[i])}>
-                <dt className="order-2 mt-4 font-display text-xl font-bold uppercase tracking-[0.04em] sm:text-2xl">{s.label}</dt>
-                <dd className={cn("order-1 font-display text-stat font-extrabold", safety && "text-accent")}>
-                  <Counter to={s.value} from={"from" in s ? s.from : 0} suffix={"suffix" in s ? s.suffix : ""} />
-                </dd>
-                <dd className="order-3 mt-2 flex items-center gap-2 font-mono text-label uppercase text-muted">
-                  {safety && <span aria-hidden="true" className="hazard inline-block h-2 w-3 rounded-[1px]" />}
-                  {s.detail}
-                </dd>
-              </div>
-            );
-          })}
+          {stats.map((s, i) => (
+            <div key={s.label} className={cn("flex flex-col border-border px-5 py-10 sm:px-8 sm:py-14 lg:py-16", cellBorders[i])}>
+              <dt className="order-2 mt-4 font-display text-xl font-bold uppercase tracking-[0.04em] sm:text-2xl">
+                <span className="mb-1 flex items-center gap-2 font-mono text-label font-normal tracking-[0.14em] text-accent">
+                  <span aria-hidden="true" className="hazard inline-block h-2 w-3 rounded-[1px]" />
+                  {s.eyebrow}
+                </span>
+                {s.label}
+              </dt>
+              <dd className="order-1 font-display text-stat font-extrabold">
+                <Counter to={s.value} suffix={s.suffix} />
+              </dd>
+              <dd className="order-3 mt-2 max-w-xs text-sm leading-6 text-muted">{s.detail}</dd>
+            </div>
+          ))}
         </dl>
       </div>
     </section>

@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 
-/** Shared input styling: dark surface, hairline border, lime focus. */
+/** Shared input styling: raised field, hairline border, green focus. */
 export const inputClass =
-  "block w-full rounded-xs border border-border bg-surface px-4 text-base text-text placeholder:text-muted transition-colors duration-300 hover:border-text/25 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40 focus-visible:outline-none aria-[invalid=true]:border-red-400/70";
+  "block w-full rounded-xs border border-border bg-raised px-4 text-base text-text placeholder:text-muted transition-colors duration-300 hover:border-text/25 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40 focus-visible:outline-none aria-[invalid=true]:border-red-600/70";
 
 type Props = {
   id: string;
@@ -27,7 +27,7 @@ export function Field({ id, label, error, hint, optional, className, children }:
       </label>
       {children}
       {error ? (
-        <p id={`${id}-error`} role="alert" className="text-sm text-red-300">
+        <p id={`${id}-error`} role="alert" className="text-sm text-red-700">
           {error}
         </p>
       ) : (

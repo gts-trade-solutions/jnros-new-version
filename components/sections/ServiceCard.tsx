@@ -1,19 +1,19 @@
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import type { Service } from "@/lib/data";
+import type { Offering } from "@/lib/data";
 
 /**
- * Tall service card. Hover (CSS only, transform/opacity):
+ * Tall solution / service card, dark-toned over its photo. Hover (CSS only, transform/opacity):
  * - photo zooms to 1.08 and the dark overlay lightens
  * - title block slides up as the description fades in beneath it
- * - the arrow turns 45° and a lime line sweeps across the bottom edge
+ * - the arrow turns 45° and a green line sweeps across the bottom edge
  * Touch devices have no hover, so they get the "open" state (description visible) by default;
  * keyboard focus opens it too.
  */
-export function ServiceCard({ service, sizes }: { service: Service; sizes: string }) {
+export function ServiceCard({ service, sizes }: { service: Offering; sizes: string }) {
   return (
-    <Link href={`/services/${service.slug}`} data-cursor="view" className="group relative block aspect-[3/4.2] overflow-hidden rounded-xs bg-surface-2">
+    <Link href={service.href} data-cursor="view" data-tone="dark" className="group relative block aspect-[3/4.2] overflow-hidden rounded-xs bg-surface-2">
       {/* [data-reveal-zoom] settles from 1.25x during the scroll reveal; the hover zoom is on the image itself. */}
       <div data-reveal-zoom className="absolute inset-0">
         <Image

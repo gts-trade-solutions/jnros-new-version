@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit",
-    "generate:map": "node --experimental-strip-types scripts/generate-map.ts"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -27,10 +26,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "d3-geo": "^3.1.1",
     "tailwindcss": "^4.3.3",
-    "topojson-client": "^3.1.0",
-    "typescript": "^5.9.0",
-    "world-atlas": "^2.0.2"
+    "typescript": "^5.9.0"
   }
 }

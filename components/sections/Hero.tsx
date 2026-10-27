@@ -23,7 +23,7 @@ type Props = typeof heroData;
  * with no per-frame JavaScript; the bar's animationend advances to the next slide, so pausing the
  * bar (hero off-screen) pauses the slideshow too. An outgoing slide keeps its zoom while it fades.
  *
- * Intro: the headline lines rise out of overflow-hidden masks, staggered; the eyebrow, subline,
+ * Intro: the headline lines rise out of overflow-hidden masks, staggered; the eyebrow, intro,
  * buttons and bottom bar fade up after them. Pure CSS (.hero-line / .hero-fade in globals.css),
  * so it plays from the first frame without waiting for JavaScript, and is held while the
  * first-visit preloader is up.
@@ -31,7 +31,7 @@ type Props = typeof heroData;
  * Scroll: the photo parallaxes slower than the page and the headline block fades, lifts and
  * scales down slightly (scrubbed). Reduced motion keeps the crossfade, drops everything else.
  */
-export function Hero({ eyebrow, lines, subline, slides }: Props) {
+export function Hero({ eyebrow, lines, intro, slides }: Props) {
   const root = useRef<HTMLElement>(null);
   const media = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
@@ -72,7 +72,13 @@ export function Hero({ eyebrow, lines, subline, slides }: Props) {
   );
 
   return (
-    <section ref={root} aria-label="Introduction" className="relative isolate flex min-h-[max(100svh,40rem)] flex-col overflow-hidden">
+    <section
+      ref={root}
+      aria-label="Introduction"
+      data-hero=""
+      data-tone="dark"
+      className="relative isolate flex min-h-[max(100svh,40rem)] flex-col overflow-hidden bg-bg"
+    >
       {/* Slides */}
       <div ref={media} className="absolute inset-0 -z-10">
         {slides.map((slide, i) => (
@@ -129,12 +135,12 @@ export function Hero({ eyebrow, lines, subline, slides }: Props) {
         </h1>
 
         <div className="mt-8 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          <p className="hero-fade font-display text-2xl font-semibold uppercase tracking-[0.2em] text-text/85 sm:text-3xl" style={{ "--i": 1 } as React.CSSProperties}>
-            {subline}
+          <p className="hero-fade max-w-2xl text-lead text-text/85" style={{ "--i": 1 } as React.CSSProperties}>
+            {intro}
           </p>
-          <div className="hero-fade flex flex-wrap gap-4" style={{ "--i": 2 } as React.CSSProperties}>
-            <MagneticButton href="/get-a-quote" size="lg">
-              Get a Quote
+          <div className="hero-fade flex shrink-0 flex-wrap gap-4" style={{ "--i": 2 } as React.CSSProperties}>
+            <MagneticButton href="/contact" size="lg">
+              Contact Us
             </MagneticButton>
             <Button href="/services" variant="outline" size="lg" arrow={false}>
               Our Services

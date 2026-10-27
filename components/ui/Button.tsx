@@ -25,7 +25,7 @@ const sizes: Record<Size, string> = {
   lg: "h-14 px-8 text-base",
 };
 
-/* Dark text on lime: 8.9:1 contrast. */
+/* Light text on the deep green (4.9:1); inside data-tone="dark" it is dark slate on lime (7.4:1). */
 const variants: Record<Variant, string> = {
   solid: "bg-accent text-bg",
   outline: "border border-text/25 text-text hover:border-accent hover:text-bg",

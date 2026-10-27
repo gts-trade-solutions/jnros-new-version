@@ -10,7 +10,7 @@ let hydrated = false;
 
 /**
  * Re-mounts on every navigation. Tells the transition layer the new page is in the DOM (so the
- * lime panel can wipe away) and fades client-side navigations in.
+ * green panel can wipe away) and fades client-side navigations in.
  *
  * Opacity only: a transform on this wrapper would become the containing block for every
  * position: fixed descendant and break GSAP-pinned sections.

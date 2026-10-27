@@ -1,25 +1,27 @@
 "use client";
 
-import { ArrowUpRight, ChevronDown, Menu, Phone, X } from "lucide-react";
+import { ChevronDown, Mail, MapPin, Phone } from "lucide-react";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/ui/Logo";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-import type { NavItem } from "@/lib/data";
+import { SocialIcon } from "@/components/ui/SocialIcon";
+import type { NavItem, SocialIcon as SocialIconName } from "@/lib/data";
 import { EASE } from "@/lib/motion";
 import { cn, telHref } from "@/lib/utils";
-import { MegaMenu, type Teaser } from "./MegaMenu";
+import { MegaMenu } from "./MegaMenu";
 import { MobileMenu } from "./MobileMenu";
 import { useLenis } from "./SmoothScroll";
 
 type Props = {
   nav: NavItem[];
-  teasers: Record<string, Teaser>;
   phone: string;
-  storeUrl: string;
-  socials: readonly { label: string; href: string; icon: string }[];
+  email: string;
+  /** Short location for the utility bar. */
+  location: string;
+  socials: readonly { label: string; href: string; icon: SocialIconName }[];
 };
 
 /** Utility bar height in px; the header slides up by this much once the page is scrolled. */
@@ -28,13 +30,16 @@ const UTILITY_H = 40;
 /**
  * Fixed site header.
  *
- * - Transparent over the hero. Once scrolled it "shrinks": the utility bar slides away, the logo
- *   scales down and a blurred dark backdrop fades in (transform + opacity only).
+ * - Full width and transparent over the hero, where it takes the hero's dark tone (data-over-hero,
+ *   see globals.css). Once scrolled the utility bar slides away, the logo scales down and the bar
+ *   lifts into a floating frosted "island" inset from the page edges (transform + opacity only).
+ * - Nav labels roll up to a green copy on hover, a soft pill slides between hovered items and a
+ *   green dot marks the current section, gliding to the new item on navigation (Motion layoutId).
  * - Hides on scroll down, reveals on scroll up (Motion useScroll, direction from the previous value).
  * - Desktop mega menus open on hover (with a short close delay so diagonal mouse paths don't drop
  *   them) or from the chevron buttons for keyboard users; Escape closes.
  */
-export function Header({ nav, teasers, phone, storeUrl, socials }: Props) {
+export function Header({ nav, phone, email, location, socials }: Props) {
   const pathname = usePathname();
   const lenis = useLenis();
   const { scrollY } = useScroll();
@@ -42,6 +47,7 @@ export function Header({ nav, teasers, phone, storeUrl, socials }: Props) {
   const [hidden, setHidden] = useState(false);
   const [mega, setMega] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hovered, setHovered] = useState<string | null>(null);
   const closeTimer = useRef(0);
   const headerRef = useRef<HTMLElement>(null);
 
@@ -93,12 +99,14 @@ export function Header({ nav, teasers, phone, storeUrl, socials }: Props) {
 
   const activeItem = nav.find((item) => item.label === mega) ?? null;
   const solid = scrolled || !!mega;
+  const island = solid && !mobileOpen;
 
   return (
     <>
       <motion.header
         ref={headerRef}
-        className="fixed inset-x-0 top-0 z-50"
+        className="fixed inset-x-0 top-0 z-50 transition-colors duration-500"
+        data-over-hero={!solid && !mobileOpen ? "" : undefined}
         initial={false}
         animate={{ y: hidden ? "-100%" : scrolled && !mobileOpen ? -UTILITY_H : 0 }}
         transition={{ duration: 0.6, ease: EASE }}
@@ -109,47 +117,51 @@ export function Header({ nav, teasers, phone, storeUrl, socials }: Props) {
         }}
       >
         {/* Utility bar */}
-        <div className="h-10 border-b border-text/[0.06] text-sm" style={{ height: UTILITY_H }}>
-          <div className="container-x flex h-full items-center justify-between gap-6">
-            <p className="hidden items-center gap-2.5 font-mono text-label uppercase text-muted sm:flex">
-              <span className="relative flex size-1.5">
-                <span className="absolute inline-flex size-full rounded-full bg-accent opacity-75 motion-safe:animate-ping" />
-                <span className="relative inline-flex size-1.5 rounded-full bg-accent" />
-              </span>
-              24/7 emergency dispatch
-            </p>
-            <ul className="ml-auto flex items-center gap-5 font-mono text-label uppercase">
+        <div className="border-b border-text/[0.08] text-sm" style={{ height: UTILITY_H }}>
+          <div className="container-x flex h-full items-center justify-between gap-6 font-mono text-label">
+            <ul className="hidden items-center divide-x divide-text/15 sm:flex">
+              <li className="pr-5">
+                <a href={`mailto:${email}`} className="flex items-center gap-2 text-muted transition-colors hover:text-text">
+                  <Mail aria-hidden="true" className="size-3.5 text-accent" />
+                  {email}
+                </a>
+              </li>
+              <li className="hidden items-center gap-2 pl-5 uppercase text-muted md:flex">
+                <MapPin aria-hidden="true" className="size-3.5 text-accent" />
+                {location}
+              </li>
+            </ul>
+            <ul className="ml-auto flex items-center gap-5 uppercase">
               <li>
                 <a href={telHref(phone)} className="flex items-center gap-2 text-text transition-colors hover:text-accent">
-                  <Phone aria-hidden="true" className="size-3.5" />
+                  <Phone aria-hidden="true" className="size-3.5 text-accent" />
                   {phone}
                 </a>
               </li>
-              <li>
-                <Link href="/careers" className="text-muted transition-colors hover:text-text">
-                  Careers
-                </Link>
-              </li>
-              <li>
-                <a href={storeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-muted transition-colors hover:text-text">
-                  Store
-                  <ArrowUpRight aria-hidden="true" className="size-3" />
-                  <span className="sr-only">(opens in a new tab)</span>
-                </a>
-              </li>
+              {socials.map((s) => (
+                <li key={s.label}>
+                  <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`${s.label} (opens in a new tab)`} className="block text-muted transition-colors hover:text-accent">
+                    <SocialIcon name={s.icon} className="size-3.5" />
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
         {/* Main bar */}
         <div className="relative h-[var(--nav-h)]">
-          <motion.div
-            aria-hidden="true"
-            className="absolute inset-0 border-b border-border bg-bg/80 backdrop-blur-xl"
-            initial={false}
-            animate={{ opacity: solid && !mobileOpen ? 1 : 0 }}
-            transition={{ duration: 0.5, ease: EASE }}
-          />
+          {/* The island: inset from the content edges, frosted, with a hairline border and soft shadow. */}
+          <div aria-hidden="true" className="container-x pointer-events-none absolute inset-0">
+            <div className="relative h-full">
+              <motion.div
+                className="absolute -inset-x-3 inset-y-2 rounded-sm border border-border bg-raised/80 shadow-[0_18px_50px_-22px_var(--shadow-color)] backdrop-blur-xl sm:-inset-x-4 lg:-inset-x-6"
+                initial={false}
+                animate={{ opacity: island ? 1 : 0, scale: island ? 1 : 1.015, y: island ? 0 : -6 }}
+                transition={{ duration: 0.5, ease: EASE }}
+              />
+            </div>
+          </div>
           <div className="container-x relative flex h-full items-center justify-between gap-6">
             <Link href="/" className="shrink-0">
               <motion.span className="block origin-left" initial={false} animate={{ scale: scrolled ? 0.88 : 1 }} transition={{ duration: 0.5, ease: EASE }}>
@@ -158,26 +170,43 @@ export function Header({ nav, teasers, phone, storeUrl, socials }: Props) {
             </Link>
 
             <nav aria-label="Main" className="hidden lg:block">
-              <ul className="flex items-center gap-1">
+              <ul className="flex items-center gap-0.5" onPointerLeave={() => setHovered(null)}>
                 {nav.map((item) => {
-                  const current = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  const current = item.href === "/" ? pathname === "/" : pathname === item.href || pathname.startsWith(`${item.href}/`);
                   const expanded = mega === item.label;
                   return (
-                    <li key={item.label} className="flex items-center" onPointerEnter={() => (item.mega ? open(item.label) : setMega(null))}>
+                    <li
+                      key={item.label}
+                      className="relative isolate flex items-center"
+                      onPointerEnter={() => {
+                        setHovered(item.label);
+                        if (item.mega) open(item.label);
+                        else setMega(null);
+                      }}
+                    >
+                      {(hovered === item.label || (expanded && !hovered)) && (
+                        <motion.span layoutId="nav-hover" aria-hidden="true" className="absolute inset-0 -z-10 rounded-xs bg-text/[0.07]" transition={{ duration: 0.45, ease: EASE }} />
+                      )}
                       <Link
                         href={item.href}
                         aria-current={current ? "page" : undefined}
-                        className={cn("group relative py-2 pl-3 font-display text-[1.05rem] font-semibold uppercase tracking-[0.06em]", item.mega ? "pr-1" : "pr-3")}
+                        className={cn("group relative py-2.5 pl-3.5 font-display text-[1.05rem] font-semibold uppercase leading-tight tracking-[0.06em]", item.mega ? "pr-1" : "pr-3.5")}
                       >
-                        <span className={cn("transition-colors", (expanded || current) && "text-accent")}>{item.label}</span>
-                        <span
-                          aria-hidden="true"
-                          className={cn(
-                            "absolute bottom-1 left-3 h-px origin-left bg-accent transition-transform duration-500 ease-brand",
-                            item.mega ? "right-1" : "right-3",
-                            current || expanded ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
-                          )}
-                        />
+                        {/* Label roll: the label slides up and out as a green copy slides in from below. */}
+                        <span className="relative block overflow-hidden">
+                          <span className={cn("block transition-transform duration-500 ease-brand group-hover:-translate-y-full", (expanded || current) && "text-accent")}>{item.label}</span>
+                          <span aria-hidden="true" className="absolute inset-0 block translate-y-full text-accent transition-transform duration-500 ease-brand group-hover:translate-y-0">
+                            {item.label}
+                          </span>
+                        </span>
+                        {current && (
+                          <motion.span
+                            layoutId="nav-current"
+                            aria-hidden="true"
+                            className="absolute bottom-0.5 left-1/2 size-1 rounded-full bg-accent"
+                            transition={{ duration: 0.6, ease: EASE }}
+                          />
+                        )}
                       </Link>
                       {item.mega && (
                         <button
@@ -187,7 +216,7 @@ export function Header({ nav, teasers, phone, storeUrl, socials }: Props) {
                           aria-controls="mega-panel"
                           aria-label={`${item.label} menu`}
                           onClick={() => setMega(expanded ? null : item.label)}
-                          className="grid size-7 place-items-center text-muted transition-colors hover:text-text"
+                          className="grid h-9 w-7 place-items-center pr-1 text-muted transition-colors hover:text-text"
                         >
                           <ChevronDown aria-hidden="true" className={cn("size-3.5 transition-transform duration-300", expanded && "rotate-180")} />
                         </button>
@@ -201,8 +230,11 @@ export function Header({ nav, teasers, phone, storeUrl, socials }: Props) {
             <div className="flex items-center gap-3">
               {/* Hidden on phones, where the menu carries the quote button. */}
               <div className="hidden sm:block">
-                <MagneticButton href="/get-a-quote" size="md" arrow={false}>
-                  Get a Quote
+                <MagneticButton href={telHref(phone)} size="md" arrow={false}>
+                  <span className="flex items-center gap-2.5">
+                    <Phone aria-hidden="true" className="size-4" />
+                    Call Now
+                  </span>
                 </MagneticButton>
               </div>
               <button
@@ -211,15 +243,19 @@ export function Header({ nav, teasers, phone, storeUrl, socials }: Props) {
                 aria-expanded={mobileOpen}
                 aria-controls="mobile-menu"
                 aria-label={mobileOpen ? "Close menu" : "Open menu"}
-                className="grid size-12 place-items-center rounded-xs border border-text/15 lg:hidden"
+                className="group grid size-12 place-items-center rounded-xs border border-text/15 transition-colors hover:border-accent lg:hidden"
               >
-                {mobileOpen ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}
+                {/* Two bars that cross into an X while the menu is open. */}
+                <span aria-hidden="true" className="relative block h-3 w-5">
+                  <span className="absolute inset-x-0 top-0 h-0.5 bg-current transition-[translate,rotate] duration-500 ease-brand group-aria-expanded:translate-y-[5px] group-aria-expanded:rotate-45" />
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 scale-x-[0.65] bg-current transition-[translate,rotate,scale] duration-500 ease-brand group-aria-expanded:-translate-y-[5px] group-aria-expanded:-rotate-45 group-aria-expanded:scale-x-100" />
+                </span>
               </button>
             </div>
           </div>
         </div>
 
-        <MegaMenu item={activeItem} teasers={teasers} />
+        <MegaMenu item={activeItem} />
       </motion.header>
 
       <MobileMenu open={mobileOpen} nav={nav} phone={phone} socials={socials} onClose={() => setMobileOpen(false)} />

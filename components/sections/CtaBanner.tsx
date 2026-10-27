@@ -2,35 +2,28 @@ import { Phone } from "lucide-react";
 import { GridLines } from "@/components/ui/GridLines";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { ParallaxImage } from "@/components/ui/ParallaxImage";
-import { PhotoTint } from "@/components/ui/PhotoTint";
 import { Reveal } from "@/components/ui/Reveal";
-import { SectionLabel } from "@/components/ui/SectionLabel";
 import { SplitText } from "@/components/ui/SplitText";
-import { type Img, pageImages, site } from "@/lib/data";
+import { cta as ctaData, type Img, pageImages, site } from "@/lib/data";
 import { telHref } from "@/lib/utils";
 
-type Props = { title?: string; label?: string; image?: Img; accent?: string[]; cta?: { label: string; href: string } };
+type Props = { title?: string; text?: string; image?: Img; accent?: string[]; cta?: { label: string; href: string } };
 
-/** Closing call to action: hazard-striped top edge, parallax photo, magnetic quote button, phone. */
-export function CtaBanner({
-  title = "Ready to move\nsomething big?",
-  label = "Start a project",
-  image = pageImages.cta,
-  accent = ["big?"],
-  cta = { label: "Request a Quote", href: "/get-a-quote" },
-}: Props) {
+/** Closing call to action: hazard-striped top edge, parallax photo (dark-toned), magnetic button, phone. */
+export function CtaBanner({ title = ctaData.title, text = ctaData.text, image = pageImages.cta, accent = ["Experience"], cta = ctaData.button }: Props) {
   return (
-    <section aria-labelledby="cta-heading" className="relative isolate overflow-hidden">
+    <section aria-labelledby="cta-heading" data-tone="dark" className="relative isolate overflow-hidden bg-bg">
       <div aria-hidden="true" className="hazard h-3 w-full" />
       <div className="relative">
         <ParallaxImage image={image} decorative amount={18} className="absolute inset-0 -z-10" />
-        <PhotoTint className="-z-10" />
         <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-bg via-bg/80 to-bg/25" />
         <GridLines className="-z-10" />
 
         <div className="container-x py-28 lg:py-44">
-          <SectionLabel>{label}</SectionLabel>
-          <SplitText id="cta-heading" text={title} accent={accent} className="mt-6 max-w-5xl text-h1" />
+          <SplitText id="cta-heading" text={title} accent={accent} className="max-w-5xl text-h1" />
+          <Reveal>
+            <p className="mt-8 max-w-2xl text-lead text-text/80">{text}</p>
+          </Reveal>
           <Reveal className="mt-12 flex flex-col gap-8 sm:flex-row sm:items-center sm:gap-10">
             <div>
               <MagneticButton href={cta.href} size="lg">
@@ -42,7 +35,7 @@ export function CtaBanner({
                 <Phone aria-hidden="true" className="size-5" />
               </span>
               <span>
-                <span className="block font-mono text-label uppercase text-muted">Talk to an engineer, 24/7</span>
+                <span className="block font-mono text-label uppercase text-muted">Call Us</span>
                 <span className="block font-display text-3xl font-extrabold transition-colors group-hover:text-accent">{site.phone}</span>
               </span>
             </a>

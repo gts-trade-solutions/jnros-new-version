@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { services, solutions } from "./lib/data";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
@@ -6,13 +7,18 @@ const nextConfig: NextConfig = {
     // The whole stylesheet is ~14 KB gzipped. Inlining it removes the only render-blocking request,
     // so the first frame (preloader / hero) paints without waiting on a network round trip.
     inlineCss: true,
-    // The Industries quote form accepts up to 5 attachments of 10 MB each.
-    serverActions: { bodySizeLimit: "52mb" },
   },
   images: {
-    // Placeholder photography. Swap for your own CDN / local images before launch.
-    remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com", pathname: "/photo-**" }],
     formats: ["image/avif", "image/webp"],
+  },
+  // The previous WordPress site served every page from the root (/about-us/, /odc-cargo-shipping/…).
+  // Send those URLs to their new homes so existing links and search results keep working.
+  async redirects() {
+    return [
+      { source: "/about-us", destination: "/about", permanent: true },
+      { source: "/contact-us", destination: "/contact", permanent: true },
+      ...[...solutions, ...services].map((o) => ({ source: `/${o.slug}`, destination: o.href, permanent: true })),
+    ];
   },
 };
 

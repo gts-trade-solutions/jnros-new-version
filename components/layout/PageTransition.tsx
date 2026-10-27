@@ -22,7 +22,7 @@ const FAILSAFE_MS = 6000;
  * seen. Instead this provider lives in the root layout (it persists across navigations):
  *
  *   1. An internal link is clicked → the click is intercepted (capture phase, before <Link>).
- *   2. A lime panel wipes across the screen from the left (AnimatePresence enter).
+ *   2. A green panel wipes across the screen from the left (AnimatePresence enter).
  *   3. Once covered, router.push() swaps the page underneath.
  *   4. app/template.tsx mounts the new page and calls onPageMount().
  *   5. We jump to the top, re-measure ScrollTriggers, and the panel wipes off to the right

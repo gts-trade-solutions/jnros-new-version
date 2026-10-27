@@ -3,6 +3,7 @@
 import { ArrowRight, Plus } from "lucide-react";
 import { AnimatePresence, motion, stagger, type Variants } from "motion/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { SocialIcon } from "@/components/ui/SocialIcon";
@@ -28,7 +29,7 @@ type Props = {
   open: boolean;
   nav: NavItem[];
   phone: string;
-  socials: readonly { label: string; href: string; icon: string }[];
+  socials: readonly { label: string; href: string; icon: SocialIconName }[];
   onClose: () => void;
 };
 
@@ -39,6 +40,7 @@ type Props = {
  */
 export function MobileMenu({ open, nav, phone, socials, onClose }: Props) {
   const [expanded, setExpanded] = useState<string | null>(null);
+  const pathname = usePathname();
   const panel = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -76,12 +78,18 @@ export function MobileMenu({ open, nav, phone, socials, onClose }: Props) {
             <motion.ul className="container-x" variants={list} initial="hidden" animate="show">
               {nav.map((item, i) => {
                 const isOpen = expanded === item.label;
+                const current = item.href === "/" ? pathname === "/" : pathname === item.href || pathname.startsWith(`${item.href}/`);
                 return (
                   <motion.li key={item.label} layout="position" transition={{ layout: { duration: 0.5, ease: EASE } }} className="border-b border-border">
                     <div className="flex items-center justify-between gap-4">
                       <span className="block overflow-hidden py-3">
                         <motion.span variants={rise} className="block">
-                          <Link href={item.href} onClick={onClose} className="flex items-baseline gap-3 font-display text-[2.6rem] font-extrabold uppercase leading-none">
+                          <Link
+                            href={item.href}
+                            onClick={onClose}
+                            aria-current={current ? "page" : undefined}
+                            className={cn("flex items-baseline gap-3 font-display text-[2.6rem] font-extrabold uppercase leading-none", current && "text-accent")}
+                          >
                             <span className="font-mono text-label font-normal text-accent">{String(i + 1).padStart(2, "0")}</span>
                             {item.label}
                           </Link>
@@ -127,18 +135,18 @@ export function MobileMenu({ open, nav, phone, socials, onClose }: Props) {
             </motion.ul>
 
             <motion.div className="container-x mt-auto space-y-6 pt-10" variants={fade} initial="hidden" animate="show">
-              <Button href="/get-a-quote" size="lg" className="w-full">
-                Get a Quote
+              <Button href="/contact" size="lg" className="w-full" onClick={onClose}>
+                Contact Us
               </Button>
               <div className="flex items-center justify-between gap-4">
                 <a href={telHref(phone)} className="font-display text-2xl font-bold">
                   {phone}
                 </a>
                 <ul className="flex gap-2">
-                  {socials.slice(0, 3).map((s) => (
+                  {socials.map((s) => (
                     <li key={s.label}>
                       <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} className="grid size-10 place-items-center rounded-xs border border-border">
-                        <SocialIcon name={s.icon as SocialIconName} />
+                        <SocialIcon name={s.icon} />
                       </a>
                     </li>
                   ))}

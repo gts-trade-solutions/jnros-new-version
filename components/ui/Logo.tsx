@@ -10,7 +10,7 @@ export function LogoMark({ className }: { className?: string }) {
 }
 
 /**
- * Emblem + wordmark, set for the dark theme. The logo's own "Jnros" lettering is a mask filled with
+ * Emblem + wordmark, for light and dark tones alike. The logo's own "Jnros" lettering is a mask filled with
  * currentColor; "Logistics" is live text so it stays legible at header size.
  * Sized in em: change the font size to scale the whole lockup.
  */

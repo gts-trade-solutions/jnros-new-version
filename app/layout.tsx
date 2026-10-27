@@ -4,12 +4,12 @@ import { Barlow_Condensed, Inter, JetBrains_Mono } from "next/font/google";
 import { Cursor } from "@/components/layout/Cursor";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
-import type { Teaser } from "@/components/layout/MegaMenu";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { Preloader } from "@/components/layout/Preloader";
+import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { JsonLd } from "@/components/ui/JsonLd";
-import { caseStudies, hero, nav, site } from "@/lib/data";
+import { hero, nav, site } from "@/lib/data";
 import { INTRO_STORAGE_KEY } from "@/lib/storage";
 import { ogImage, organizationJsonLd } from "@/lib/seo";
 import "./globals.css";
@@ -18,7 +18,7 @@ const display = Barlow_Condensed({ subsets: ["latin"], weight: ["600", "700", "8
 const sans = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: "400", variable: "--font-jetbrains", display: "swap" });
 
-const defaultTitle = `${site.name} | Machinery Moving, Heavy Lift, Cranes & Transport`;
+const defaultTitle = `${site.name} | Engineered Logistics for Complex Cargo`;
 const shareImage = ogImage(hero.slides[0].image);
 
 export const metadata: Metadata = {
@@ -26,11 +26,11 @@ export const metadata: Metadata = {
   title: { default: defaultTitle, template: `%s | ${site.name}` },
   description: site.description,
   applicationName: site.name,
-  keywords: ["machinery moving", "heavy lift", "rigging", "crane services", "specialized transportation", "millwright", "industrial metrology", "heavy haul"],
+  keywords: ["project cargo", "breakbulk", "ODC cargo", "heavy lift", "ro-ro shipping", "bulk carrier", "air freight", "ocean freight", "customs clearance", "Bangalore"],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "en_IN",
     siteName: site.name,
     url: "/",
     title: defaultTitle,
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0B0D0E",
-  colorScheme: "dark",
+  themeColor: "#F5F7F9",
+  colorScheme: "light",
 };
 
 /*
@@ -55,11 +55,6 @@ export const viewport: Viewport = {
  *   removed so every pre-hidden element and the page behind the preloader become visible.
  */
 const bootScript = `(function(){var d=document.documentElement;d.classList.add('js');try{if(!sessionStorage.getItem('${INTRO_STORAGE_KEY}')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('preload')}catch(e){}setTimeout(function(){if(!window.__siteHydrated)d.classList.remove('js','preload')},5000)})();`;
-
-/** Compact case-study data for the mega menu teasers. */
-const teasers: Record<string, Teaser> = Object.fromEntries(
-  caseStudies.map((c) => [c.slug, { slug: c.slug, title: c.title, location: c.location, weight: c.weight, image: c.image }]),
-);
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -78,7 +73,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <PageTransition>
             <Preloader />
             <Cursor />
-            <Header nav={nav} teasers={teasers} phone={site.phone} storeUrl={site.storeUrl} socials={site.socials} />
+            <ScrollProgress />
+            <Header nav={nav} phone={site.phone} email={site.email} location={site.address.lines[2]} socials={site.socials} />
             <main id="main">{children}</main>
             {/* Own hydration unit: the footer is never needed on the first frame. */}
             <Suspense>

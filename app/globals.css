@@ -4,19 +4,26 @@
 /* Design tokens                                                             */
 /* ------------------------------------------------------------------------ */
 
+/*
+ * Light theme: cool off-white pages, slate ink and a deep brand green that passes AA as text
+ * (4.9:1 on --bg) and carries light text as a fill. --surface is the alternate section band,
+ * --surface-2 the image placeholder / hover tint, --raised cards and form fields.
+ */
 :root {
-  --bg: #0b0d0e;
-  --surface: #15181a;
-  --surface-2: #1e2225;
-  --accent: #7ac143;
-  --accent-hover: #8fd656;
+  --bg: #f5f7f9;
+  --surface: #edf1f4;
+  --surface-2: #dde4ea;
+  --raised: #ffffff;
+  --accent: #3d7a1d;
+  --accent-hover: #336817;
   --warning: #f5b800;
-  --text: #f2f2f2;
-  --muted: #9aa3a8;
-  --border: rgba(255, 255, 255, 0.08);
-  /* Background grid texture and outlined display text (re-tinted by the forest theme). */
-  --grid-line: rgba(255, 255, 255, 0.06);
-  --outline-color: rgb(242 242 242 / 0.28);
+  --text: #16202a;
+  --muted: #56616d;
+  --border: rgba(22, 32, 42, 0.12);
+  /* Background grid texture and outlined display text. */
+  --grid-line: rgba(22, 32, 42, 0.06);
+  --outline-color: rgb(22 32 42 / 0.2);
+  --shadow-color: rgb(22 32 42 / 0.16);
 
   /* One easing curve for every reveal on the site (GSAP "brand", Motion EASE, CSS ease-brand). */
   --ease-brand-curve: cubic-bezier(0.22, 1, 0.36, 1);
@@ -31,6 +38,7 @@
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-raised: var(--raised);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-warning: var(--warning);
@@ -70,17 +78,18 @@
   --text-label--letter-spacing: 0.14em;
   --text-stat: clamp(3.25rem, 6.4vw, 6rem);
   --text-stat--line-height: 0.85;
-  --text-marquee: clamp(3rem, 8.5vw, 7.5rem);
+  --text-marquee: clamp(3rem, 8vw, 7rem);
   --text-marquee--line-height: 1;
-  --text-wordmark: clamp(9rem, 33vw, 34rem);
-  --text-wordmark--line-height: 0.78;
 
-  --animate-marquee-left: marquee-left var(--marquee-duration, 48s) linear infinite;
-  --animate-marquee-right: marquee-right var(--marquee-duration, 48s) linear infinite;
-  --animate-pin-pulse: pin-pulse 2.8s var(--ease-brand-curve) infinite;
   --animate-scroll-cue: scroll-cue 2.2s var(--ease-brand-curve) infinite;
   --animate-kenburns: kenburns 8s linear forwards;
   --animate-progress: progress var(--progress-duration, 7s) linear forwards;
+  /* Footer transit scene: vehicles cross the band, waves roll, the ship rocks. */
+  --animate-cross-right: cross-right var(--cross-duration, 18s) linear infinite;
+  --animate-cross-left: cross-left var(--cross-duration, 40s) linear infinite;
+  --animate-waves: waves 7s linear infinite;
+  --animate-rock: rock 3.2s ease-in-out infinite alternate;
+  --animate-hover: hover 2.6s ease-in-out infinite alternate;
 
   /* Hero Ken Burns: a slow push-in. CSS (not JS) so it runs on the compositor. */
   @keyframes kenburns {
@@ -101,29 +110,43 @@
     }
   }
 
-  @keyframes marquee-left {
-    to {
-      transform: translate3d(-50%, 0, 0);
-    }
-  }
-  @keyframes marquee-right {
+  /* From just off the left edge to just off the right edge of the viewport (and back). */
+  @keyframes cross-right {
     from {
-      transform: translate3d(-50%, 0, 0);
+      transform: translateX(-16rem);
     }
     to {
-      transform: translate3d(0, 0, 0);
+      transform: translateX(calc(100vw + 2rem));
     }
   }
-  /* Soft radar ping behind each map pin (HTML overlay, so it runs on the compositor). */
-  @keyframes pin-pulse {
-    0% {
-      transform: scale(0.5);
-      opacity: 0.7;
+  @keyframes cross-left {
+    from {
+      transform: translateX(calc(100vw + 2rem));
     }
-    80%,
-    100% {
-      transform: scale(2.8);
-      opacity: 0;
+    to {
+      transform: translateX(-12rem);
+    }
+  }
+  /* The wave strip is two identical halves, so -50% loops seamlessly. */
+  @keyframes waves {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes rock {
+    from {
+      transform: translateY(-2px) rotate(-3deg);
+    }
+    to {
+      transform: translateY(2px) rotate(3deg);
+    }
+  }
+  @keyframes hover {
+    from {
+      transform: translateY(-4px);
+    }
+    to {
+      transform: translateY(4px);
     }
   }
   /* A short segment travelling down the hero's scroll indicator. */
@@ -138,70 +161,34 @@
 }
 
 /* ------------------------------------------------------------------------ */
-/* Green theme ("forest"), used by the Industries section                     */
+/* Dark tone: text over photography                                          */
 /* ------------------------------------------------------------------------ */
 
 /*
- * Tailwind v4 reads colors from @theme only (no tailwind.config.js), so the green palette lives
- * here and generates utilities such as bg-forest-900, text-lime and border-line.
+ * Photo heroes, the CTA banner, image cards and the lightbox set data-tone="dark": the site tokens
+ * switch back to the slate palette inside them, so white headlines and the bright brand green stay
+ * legible over photos while the rest of the page is light.
+ *
+ * The fixed header sits over the hero until the page scrolls, so while it is transparent
+ * (data-over-hero) it takes the same tone, but only on pages that open with a dark hero.
  */
-@theme {
-  --color-forest-950: #04100a; /* page background */
-  --color-forest-900: #071a10; /* alternate section background */
-  --color-forest-800: #0c2617; /* cards */
-  --color-forest-700: #12351f; /* card hover, borders */
-  --color-forest-600: #1b4a2b;
-  --color-lime: #8bd346; /* primary accent */
-  --color-lime-bright: #b5f26b; /* hover, glow text */
-  --color-lime-deep: #5e9a30;
-  --color-mint: #d9f2c7; /* soft highlight text */
-  --color-cream: #f1f5ec; /* main text */
-  --color-sage: #8fa897; /* muted text */
-  --color-line: rgba(139, 211, 70, 0.14);
-
-  --animate-tape: tape 1.6s linear infinite;
-  --animate-drop-pulse: drop-pulse 1.1s ease-in-out infinite;
-
-  /* Hazard tape: the 32px tile scrolls exactly one tile per loop, so it's seamless. */
-  @keyframes tape {
-    to {
-      transform: translateX(-32px);
-    }
-  }
-  /* Drop zone border while a file is dragged over it. */
-  @keyframes drop-pulse {
-    0%,
-    100% {
-      opacity: 0.35;
-    }
-    50% {
-      opacity: 1;
-    }
-  }
+[data-tone="dark"],
+:root:has([data-hero]) [data-over-hero] {
+  --bg: #18212b;
+  --surface: #202b37;
+  --surface-2: #2a3745;
+  --raised: #202b37;
+  --accent: #7ac143;
+  --accent-hover: #8fd656;
+  --text: #f2f2f2;
+  --muted: #a3adb5;
+  --border: rgba(255, 255, 255, 0.1);
+  --grid-line: rgba(255, 255, 255, 0.07);
+  --outline-color: rgb(242 242 242 / 0.28);
+  --shadow-color: rgb(0 0 0 / 0.6);
+  color: var(--text);
+  color-scheme: dark;
 }
-
-/*
- * Any page that renders a [data-theme="forest"] wrapper (app/industries/layout.tsx) re-maps the
- * site tokens, so the shared header, footer, cursor, page-transition panel, buttons and labels all
- * turn green with it, and html/body take the forest-950 background and cream text. The rest of the
- * site keeps its charcoal palette. To make the whole site green, put data-theme="forest" on <body>.
- */
-:root:has([data-theme="forest"]) {
-  --bg: var(--color-forest-950);
-  --surface: var(--color-forest-900);
-  --surface-2: var(--color-forest-800);
-  --accent: var(--color-lime);
-  --accent-hover: var(--color-lime-bright);
-  --warning: var(--color-lime);
-  --text: var(--color-cream);
-  --muted: var(--color-sage);
-  --border: var(--color-line);
-  --grid-line: rgba(139, 211, 70, 0.07);
-  --outline-color: rgb(139 211 70 / 0.55);
-}
-
-/* Styles that apply only while the forest theme is on, e.g. `hidden forest:block`. */
-@custom-variant forest (:root:has([data-theme="forest"]) &);
 
 /* Devices that actually hover (mouse/trackpad). Touch devices get the "revealed" state by default. */
 @custom-variant can-hover {
@@ -226,7 +213,7 @@
   background-image: repeating-linear-gradient(-45deg, var(--warning) 0 0.75rem, var(--bg) 0.75rem 1.5rem);
 }
 
-/* Large outlined display text (footer wordmark, marquee alternates). */
+/* Large outlined display text (404). */
 @utility text-outline {
   color: transparent;
   -webkit-text-stroke: 1px var(--outline-color);
@@ -255,7 +242,7 @@
 @layer base {
   html {
     background-color: var(--bg);
-    color-scheme: dark;
+    color-scheme: light;
     -webkit-text-size-adjust: 100%;
     scroll-padding-top: calc(var(--nav-h) + 1rem);
   }
@@ -364,16 +351,6 @@ html.lenis body {
 .js [data-split]:not([data-shown]) [data-word] {
   transform: translateY(125%);
 }
-.js [data-pins]:not([data-shown]) [data-pin],
-.js [data-pins]:not([data-shown]) [data-map-dots] {
-  opacity: 0;
-}
-
-/* Looping decorations pause while their section is off-screen (toggled by an observer). */
-[data-offscreen] .marquee-track,
-[data-offscreen] [data-pulse] {
-  animation-play-state: paused;
-}
 
 /* Reduced motion: the same reveals become plain fades. */
 @media (prefers-reduced-motion: reduce) {
@@ -388,10 +365,6 @@ html.lenis body {
   .js [data-reveal-image]:not([data-shown]) [data-reveal-zoom],
   .js [data-reveal="clip"] [data-reveal-zoom] {
     transform: none;
-  }
-  .js [data-pins]:not([data-shown]) [data-pin],
-  .js [data-pins]:not([data-shown]) [data-map-dots] {
-    opacity: 1;
   }
 }
 
@@ -410,20 +383,9 @@ html.lenis body {
   animation: hero-fade 1s var(--ease-brand-curve) both;
   animation-delay: calc(0.5s + var(--i, 0) * 0.1s);
 }
-/* Rule under the Industries headline: draws from its left edge (scaleX), between headline and subline. */
-.hero-rule {
-  animation: hero-rule 1.1s var(--ease-brand-curve) both;
-  animation-delay: 0.3s;
-}
 .preload:not(.intro) .hero-line,
-.preload:not(.intro) .hero-fade,
-.preload:not(.intro) .hero-rule {
+.preload:not(.intro) .hero-fade {
   animation: none;
-}
-@keyframes hero-rule {
-  from {
-    transform: scaleX(0);
-  }
 }
 @keyframes hero-rise {
   from {
@@ -438,26 +400,21 @@ html.lenis body {
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-line,
-  .hero-fade,
-  .hero-rule {
+  .hero-fade {
     animation-name: fade-in;
     animation-duration: 0.6s;
   }
 }
 
-/*
- * Industries intro: the cream copy of each word is scrubbed in over the sage text (GSAP, opacity);
- * with reduced motion it is simply shown.
- */
-@media (prefers-reduced-motion: reduce) {
-  [data-word-on] {
-    opacity: 1 !important;
-  }
-}
 @keyframes fade-in {
   from {
     opacity: 0;
   }
+}
+
+/* Looping decorations pause while their section is off-screen (toggled by <PauseOffscreen>). */
+[data-offscreen] [data-loop] {
+  animation-play-state: paused;
 }
 
 /* The preloader exists in the markup on every page but only shows on a first visit (html.preload). */
@@ -478,37 +435,4 @@ html.has-cursor :is(input, textarea, select, [contenteditable="true"]) {
 }
 html.has-cursor select {
   cursor: pointer !important;
-}
-
-/* Marquees pause while hovered (and never move for reduced motion). */
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
-
-/* Long-form article text (news posts, legal pages). */
-.prose-brand > * + * {
-  margin-top: 1.25em;
-}
-.prose-brand h2 {
-  margin-top: 2em;
-  font-size: var(--text-h3);
-  line-height: 1;
-}
-.prose-brand p,
-.prose-brand li {
-  color: rgb(242 242 242 / 0.8);
-  font-size: 1.0625rem;
-  line-height: 1.75;
-}
-.prose-brand ul {
-  list-style: square;
-  padding-left: 1.25em;
-}
-.prose-brand li::marker {
-  color: var(--accent);
-}
-.prose-brand a {
-  color: var(--accent);
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }

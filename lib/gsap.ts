@@ -1,6 +1,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { CustomEase } from "gsap/CustomEase";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 /*
@@ -10,7 +11,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
  * "brand" is the site-wide easing: cubic-bezier(0.22, 1, 0.36, 1), the same curve Motion and CSS use.
  */
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(useGSAP, ScrollTrigger, CustomEase);
+  gsap.registerPlugin(useGSAP, ScrollTrigger, CustomEase, MotionPathPlugin);
   CustomEase.create("brand", "0.22, 1, 0.36, 1");
   gsap.defaults({ ease: "brand", duration: 1 });
   gsap.config({ nullTargetWarn: false });

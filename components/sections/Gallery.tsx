@@ -31,6 +31,7 @@ export function Gallery({ images }: { images: Img[] }) {
                 setIndex(i);
               }}
               aria-label={`View larger: ${img.alt}`}
+              data-tone="dark"
               className="group relative block w-full overflow-hidden rounded-xs bg-surface-2"
             >
               <Image
@@ -69,7 +70,7 @@ export function Gallery({ images }: { images: Img[] }) {
  * Fullscreen viewer: arrow keys / buttons to page, Escape to close, swipe (drag) on touch and
  * mouse. Slides travel in the direction of navigation.
  */
-function Lightbox({ images, index, onIndex, onClose }: { images: Img[]; index: number | null; onIndex: (i: number) => void; onClose: () => void }) {
+export function Lightbox({ images, index, onIndex, onClose }: { images: Img[]; index: number | null; onIndex: (i: number) => void; onClose: () => void }) {
   const lenis = useLenis();
   const [direction, setDirection] = useState(1);
   const closeButton = useRef<HTMLButtonElement>(null);
@@ -116,6 +117,7 @@ function Lightbox({ images, index, onIndex, onClose }: { images: Img[]; index: n
           role="dialog"
           aria-modal="true"
           aria-label="Image viewer"
+          data-tone="dark"
           className="fixed inset-0 z-[160] flex flex-col bg-bg/95 backdrop-blur-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

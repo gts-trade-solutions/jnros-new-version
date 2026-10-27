@@ -9,7 +9,7 @@ type Mode = { type: "default" | "link" | "label" | "hidden"; label?: string };
 
 /**
  * Custom cursor (desktop, mouse, motion allowed): a dot that tracks the pointer exactly and a ring
- * that trails it on a spring. Over [data-cursor="view"|"drag"] the ring grows into a lime disc
+ * that trails it on a spring. Over [data-cursor="view"|"drag"] the ring grows into a green disc
  * with the label; over links and buttons it expands slightly; over form fields it hides so the
  * native text cursor takes over.
  */

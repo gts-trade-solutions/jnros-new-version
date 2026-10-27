@@ -4,9 +4,9 @@ import { useEffect, useRef } from "react";
 
 /**
  * Marks its wrapper [data-offscreen] while it is outside the viewport, which pauses the looping
- * CSS animations inside it (see globals.css). Saves battery and main-thread time on long pages.
+ * CSS animations marked [data-loop] inside it (see globals.css). Saves battery and main-thread time on long pages.
  */
-export function PauseOffscreen({ children, className }: { children: React.ReactNode; className?: string }) {
+export function PauseOffscreen({ children, ...rest }: React.HTMLAttributes<HTMLDivElement>) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -16,7 +16,7 @@ export function PauseOffscreen({ children, className }: { children: React.ReactN
     return () => io.disconnect();
   }, []);
   return (
-    <div ref={ref} data-offscreen="" className={className}>
+    <div ref={ref} data-offscreen="" {...rest}>
       {children}
     </div>
   );

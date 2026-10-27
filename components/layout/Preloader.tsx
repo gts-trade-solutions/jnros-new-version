@@ -6,7 +6,7 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { INTRO_STORAGE_KEY, markIntroDone } from "@/lib/intro";
 
 /**
- * First-visit preloader (~1.6s): a 000→100 counter and a lime progress bar, then the panel splits
+ * First-visit preloader (~1.6s): a 000→100 counter and a green progress bar, then the panel splits
  * down the middle and both halves wipe upward, staggered, to reveal the hero.
  *
  * The markup is always server-rendered but only displayed when the inline boot script has added
@@ -75,12 +75,11 @@ export function Preloader() {
       <div data-pl-half className="absolute inset-y-0 right-0 w-1/2 border-l border-border bg-surface" />
 
       <div data-pl-content className="container-x relative flex h-full flex-col justify-between py-8 sm:py-12">
-        <div className="flex items-center justify-between font-mono text-label uppercase text-muted">
+        <div className="flex items-center font-mono text-label uppercase text-muted">
           <span className="flex items-center gap-3">
             <LogoMark className="size-8" />
             Jnros Logistics
           </span>
-          <span>Est. 1984</span>
         </div>
 
         <div>
@@ -98,7 +97,7 @@ export function Preloader() {
                 </span>
               ))}
             </span>
-            <span className="mb-3 hidden font-mono text-label uppercase text-muted sm:block">Loading the heavy stuff</span>
+            <span className="mb-3 hidden font-mono text-label uppercase text-muted sm:block">Loading</span>
           </div>
           <div className="mt-6 h-[3px] w-full bg-border">
             <div data-pl-bar className="h-full w-full origin-left scale-x-0 bg-accent" />
