@@ -25,8 +25,7 @@ type Props = typeof heroData;
  *
  * Intro: the headline lines rise out of overflow-hidden masks, staggered; the eyebrow, intro,
  * buttons and bottom bar fade up after them. Pure CSS (.hero-line / .hero-fade in globals.css),
- * so it plays from the first frame without waiting for JavaScript, and is held while the
- * first-visit preloader is up.
+ * so it plays from the first frame without waiting for JavaScript.
  *
  * Scroll: the photo parallaxes slower than the page and the headline block fades, lifts and
  * scales down slightly (scrubbed). Reduced motion keeps the crossfade, drops everything else.

@@ -318,19 +318,10 @@ html.lenis body {
 /* ------------------------------------------------------------------------ */
 
 /*
- * html.js is added by an inline script before first paint. Elements that animate in on load
- * ([data-pre]) start hidden so there's no flash of their final state. Without JavaScript the
- * class is never added and everything is visible; if the bundle hasn't hydrated within 5s the
- * boot script removes the class again (see app/layout.tsx), so content can never stay hidden.
+ * html.js is added by an inline script before first paint. Without JavaScript the class is never
+ * added and everything is visible; if the bundle hasn't hydrated within 5s the boot script removes
+ * the class again (see app/layout.tsx), so content can never stay hidden.
  *
- * During the first-visit preloader (html.preload) they are left visible: the opaque preloader
- * covers them, they paint immediately (good for LCP), and their intro starts as it lifts.
- */
-.js:not(.preload) [data-pre] {
-  visibility: hidden;
-}
-
-/*
  * Reveals (Reveal, SplitText, RevealImage, map pins). The start state lives in CSS so nothing is
  * measured or written at hydration; each component marks items [data-shown] and animates them in
  * from the same values when an IntersectionObserver sees them.
@@ -369,23 +360,18 @@ html.lenis body {
 }
 
 /*
- * Home hero intro: pure CSS, so it starts on the very first frame without waiting for JavaScript.
- * Headline lines rise out of their masks (staggered by --i), then the subline, buttons and bottom
- * bar fade up. During the first-visit preloader the intro is held in its final state (painted
- * behind the panel) and plays when the preloader releases it (html.intro).
+ * Hero intro (home Hero and inner PageHero): pure CSS, so it starts on the very first frame
+ * without waiting for JavaScript. Headline lines or words rise out of their masks (staggered by
+ * --i), then the subline, buttons and bottom bar fade up.
  */
 .hero-line {
-  /* Timing is tunable per hero: --hero-duration / --hero-stagger on the heading. */
+  /* Timing is tunable per hero: --hero-duration / --hero-delay / --hero-stagger on the heading. */
   animation: hero-rise var(--hero-duration, 1.2s) var(--ease-brand-curve) both;
-  animation-delay: calc(0.05s + var(--i, 0) * var(--hero-stagger, 0.12s));
+  animation-delay: calc(var(--hero-delay, 0.05s) + var(--i, 0) * var(--hero-stagger, 0.12s));
 }
 .hero-fade {
   animation: hero-fade 1s var(--ease-brand-curve) both;
   animation-delay: calc(0.5s + var(--i, 0) * 0.1s);
-}
-.preload:not(.intro) .hero-line,
-.preload:not(.intro) .hero-fade {
-  animation: none;
 }
 @keyframes hero-rise {
   from {
@@ -415,13 +401,5 @@ html.lenis body {
 /* Looping decorations pause while their section is off-screen (toggled by <PauseOffscreen>). */
 [data-offscreen] [data-loop] {
   animation-play-state: paused;
-}
-
-/* The preloader exists in the markup on every page but only shows on a first visit (html.preload). */
-.preloader {
-  display: none;
-}
-.preload .preloader {
-  display: block;
 }
 

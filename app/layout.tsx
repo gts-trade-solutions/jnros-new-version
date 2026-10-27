@@ -4,12 +4,10 @@ import { Barlow_Condensed, Inter, JetBrains_Mono } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { PageTransition } from "@/components/layout/PageTransition";
-import { Preloader } from "@/components/layout/Preloader";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { hero, nav, site } from "@/lib/data";
-import { INTRO_STORAGE_KEY } from "@/lib/storage";
 import { ogImage, organizationJsonLd } from "@/lib/seo";
 import "./globals.css";
 
@@ -48,12 +46,11 @@ export const viewport: Viewport = {
 
 /*
  * Runs before first paint:
- * - html.js lets CSS pre-hide elements that animate in on load (no flash of their final state).
- * - html.preload shows the preloader on the first visit of a session, unless reduced motion is on.
- * - Safety net: if the app hasn't hydrated within 5s (blocked or failed bundle), both classes are
- *   removed so every pre-hidden element and the page behind the preloader become visible.
+ * - html.js lets CSS pre-hide elements that reveal on scroll (no flash of their final state).
+ * - Safety net: if the app hasn't hydrated within 5s (blocked or failed bundle), the class is
+ *   removed so every pre-hidden element becomes visible.
  */
-const bootScript = `(function(){var d=document.documentElement;d.classList.add('js');try{if(!sessionStorage.getItem('${INTRO_STORAGE_KEY}')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('preload')}catch(e){}setTimeout(function(){if(!window.__siteHydrated)d.classList.remove('js','preload')},5000)})();`;
+const bootScript = `(function(){var d=document.documentElement;d.classList.add('js');setTimeout(function(){if(!window.__siteHydrated)d.classList.remove('js')},5000)})();`;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -70,7 +67,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </a>
         <SmoothScroll>
           <PageTransition>
-            <Preloader />
             <ScrollProgress />
             <Header nav={nav} phone={site.phone} email={site.email} location={site.address.lines[2]} socials={site.socials} />
             <main id="main">{children}</main>

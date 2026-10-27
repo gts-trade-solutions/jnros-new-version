@@ -28,7 +28,7 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL` and `FORMS_WE
 app/                      routes (server components), template.tsx, actions.ts, sitemap.ts, robots.ts
   about  solutions/[slug]  services/[slug]  gallery  contact
 components/
-  layout/                 Header, MegaMenu, MobileMenu, Footer, Preloader, PageTransition, SmoothScroll
+  layout/                 Header, MegaMenu, MobileMenu, Footer, PageTransition, SmoothScroll
   sections/               Hero, Stats, AboutIntro, ServicesGrid, ServiceCard, OfferingIndex, OfferingDetail,
                           CtaBanner, PageHero, Gallery (masonry + lightbox)
   ui/                     Button, MagneticButton, Magnetic, SplitText, Reveal, RevealImage, ParallaxImage,
@@ -70,10 +70,9 @@ Light by default: the tokens are on `:root` in `app/globals.css` (`--bg`, `--sur
 
 | What | Tool | Where |
 |---|---|---|
-| Preloader (first visit per session): counter, bar, split wipe | GSAP timeline | `layout/Preloader.tsx` |
-| Page transition: green panel wipe, then fade | Motion `AnimatePresence` + `template.tsx` | `layout/PageTransition.tsx` |
+| Page transition: green panel wipe (the next page loads during the wipe), then fade, under 1s | Motion `AnimatePresence` + `template.tsx` | `layout/PageTransition.tsx` |
 | Header hide/show and shrink, mega menu, mobile menu | Motion | `layout/Header.tsx`, `MegaMenu.tsx`, `MobileMenu.tsx` |
-| Hero intro, Ken Burns, slide timer | CSS keyframes (compositor) | `globals.css` (`.hero-line`, `animate-kenburns`) |
+| Hero intros (home and inner pages), Ken Burns, slide timer | CSS keyframes (compositor), no wait for JavaScript | `globals.css` (`.hero-line`, `animate-kenburns`) |
 | Scroll reveals (split text, fade/clip groups, image wipes) | CSS start state + IntersectionObserver + GSAP tween | `ui/Reveal.tsx`, `ui/SplitText.tsx`, `ui/RevealImage.tsx` |
 | Pinned / scrubbed (hero parallax, un-crop, word highlight, horizontal Recent Works strip, route line) | GSAP ScrollTrigger | set up in idle tasks via `useIdleGSAP`; `WorksScroller.tsx`, `RouteBand.tsx` |
 | Name band: two looping rows that speed up and lean with scroll velocity | GSAP loop + ScrollTrigger velocity | `sections/KineticMarquee.tsx` |
@@ -89,7 +88,7 @@ Light by default: the tokens are on `:root` in `app/globals.css` (`--bg`, `--sur
 - Durations are 0.6–1.2s. Staggers are 0.06–0.12s, or 0.04s inside the mega menu.
 - Only `transform`, `opacity` and `clip-path` animate. The one exception is the route line's scrubbed `stroke-dashoffset` (a single SVG path).
 
-**Reduced motion.** Lenis, magnetic pulls, card tilt, the showcase autocycle, pinning, parallax, the Ken Burns zoom, the name band, the route marker, the footer scene and the preloader are all off. Reveals become plain fades.
+**Reduced motion.** Lenis, magnetic pulls, card tilt, the showcase autocycle, pinning, parallax, the Ken Burns zoom, the name band, the route marker, and the footer scene are all off. Reveals become plain fades.
 
 **Off-screen loops pause.** The name band, the route marker and the footer scene stop while out of view.
 

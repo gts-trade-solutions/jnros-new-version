@@ -21,13 +21,15 @@ const FAILSAFE_MS = 6000;
  * The App Router swaps pages instantly, so an exit animation inside template.tsx would never be
  * seen. Instead this provider lives in the root layout (it persists across navigations):
  *
- *   1. An internal link is clicked → the click is intercepted (capture phase, before <Link>).
+ *   1. An internal link is clicked → the click is intercepted (capture phase, before <Link>), and
+ *      the new page starts loading right away (router.prefetch), in parallel with the wipe.
  *   2. A green panel wipes across the screen from the left (AnimatePresence enter).
- *   3. Once covered, router.push() swaps the page underneath.
+ *   3. Once covered, router.push() swaps the page underneath (usually instant: already fetched).
  *   4. app/template.tsx mounts the new page and calls onPageMount().
  *   5. We jump to the top, re-measure ScrollTriggers, and the panel wipes off to the right
  *      (AnimatePresence exit) while the template fades the new page in.
  *
+ * The whole round trip is kept under a second so the wipe never reads as loading time.
  * Reduced motion: no panel, just the template's fade.
  */
 export function PageTransition({ children }: { children: React.ReactNode }) {
@@ -57,12 +59,13 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
       if (phase.current !== "idle") return;
       phase.current = "covering";
       pending.current = { href: url.pathname + url.search + url.hash, hash: url.hash };
+      router.prefetch(url.pathname + url.search);
       lenis?.stop();
       setCovered(true);
     };
     document.addEventListener("click", onClick, true);
     return () => document.removeEventListener("click", onClick, true);
-  }, [lenis]);
+  }, [lenis, router]);
 
   const uncover = useCallback(() => {
     window.clearTimeout(failsafe.current);
@@ -100,8 +103,8 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
             aria-hidden="true"
             className="fixed inset-0 z-[150] flex items-center justify-center bg-accent text-bg"
             initial={{ x: "-100%" }}
-            animate={{ x: "0%", transition: { duration: 0.7, ease: EASE } }}
-            exit={{ x: "100%", transition: { duration: 0.8, ease: EASE, delay: 0.05 } }}
+            animate={{ x: "0%", transition: { duration: 0.4, ease: EASE } }}
+            exit={{ x: "100%", transition: { duration: 0.5, ease: EASE } }}
             onAnimationComplete={(definition) => {
               // Fires for both enter and exit; only the enter (x: 0%) means "covered".
               if ((definition as { x?: string }).x === "0%") onCovered();
@@ -111,8 +114,8 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
             <span className="hazard absolute inset-y-0 right-0 w-2" />
             <motion.span
               initial={{ opacity: 0, scale: 0.85 }}
-              animate={{ opacity: 1, scale: 1, transition: { delay: 0.25, duration: 0.5, ease: EASE } }}
-              exit={{ opacity: 0, transition: { duration: 0.2 } }}
+              animate={{ opacity: 1, scale: 1, transition: { delay: 0.1, duration: 0.3, ease: EASE } }}
+              exit={{ opacity: 0, transition: { duration: 0.15 } }}
             >
               <LogoMark className="size-24" />
             </motion.span>

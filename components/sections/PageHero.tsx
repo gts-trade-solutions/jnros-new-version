@@ -1,7 +1,6 @@
 import { type Crumb, Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { GridLines } from "@/components/ui/GridLines";
 import { ParallaxImage } from "@/components/ui/ParallaxImage";
-import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { SplitText } from "@/components/ui/SplitText";
 import type { Img } from "@/lib/data";
@@ -19,8 +18,9 @@ type Props = {
 
 /**
  * Inner-page hero: parallax photo, breadcrumbs, label, split-text H1 and intro. Dark-toned (see
- * globals.css) so the white headline reads over any photo. Everything above
- * the fold plays on load (after the preloader on a first visit) rather than on scroll.
+ * globals.css) so the white headline reads over any photo. The entrance is the CSS hero intro
+ * (.hero-line / .hero-fade): headline words rise, then the crumbs, label and intro fade up, from
+ * the first frame and without waiting for JavaScript.
  */
 export function PageHero({ label, title, intro, image, crumbs, size = "lg", children }: Props) {
   return (
@@ -31,15 +31,15 @@ export function PageHero({ label, title, intro, image, crumbs, size = "lg", chil
       <GridLines className="-z-10" />
 
       <div className="container-x w-full pb-16 pt-44 lg:pb-24">
-        <Reveal trigger="load" stagger={0.1}>
+        <div className="hero-fade" style={{ animationDelay: "0.2s" }}>
           <Breadcrumbs items={crumbs} />
           <SectionLabel className="mt-10">{label}</SectionLabel>
-        </Reveal>
+        </div>
         <SplitText as="h1" trigger="load" delay={0.1} text={title} className="mt-6 max-w-6xl text-h1" />
         {intro && (
-          <Reveal trigger="load" delay={0.45}>
-            <p className="mt-8 max-w-2xl text-lead text-text/80">{intro}</p>
-          </Reveal>
+          <p className="hero-fade mt-8 max-w-2xl text-lead text-text/80" style={{ animationDelay: "0.45s" }}>
+            {intro}
+          </p>
         )}
         {children}
       </div>

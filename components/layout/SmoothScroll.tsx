@@ -4,7 +4,6 @@ import type Lenis from "lenis";
 import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { isIntroDone, subscribeIntro } from "@/lib/intro";
 import { MQ } from "@/lib/motion";
 
 const LenisContext = createContext<Lenis | null>(null);
@@ -34,7 +33,6 @@ export function jumpTo(lenis: Lenis | null, target: number | HTMLElement = 0) {
  *
  * - Mouse/trackpad only: touch devices keep native momentum scrolling and never download Lenis.
  * - Off for prefers-reduced-motion.
- * - Paused while the first-visit preloader is on screen.
  * - Re-measures triggers after fonts and late images change the page height, and on navigation.
  */
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
@@ -52,7 +50,6 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     if (!window.matchMedia(MQ.finePointer).matches) return;
 
     let instance: Lenis | null = null;
-    let unsubscribe: (() => void) | undefined;
     let cancelled = false;
     const tick = (time: number) => instance?.raf(time * 1000);
 
@@ -63,16 +60,11 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       instance.on("scroll", ScrollTrigger.update);
       gsap.ticker.add(tick);
       gsap.ticker.lagSmoothing(0);
-      if (!isIntroDone()) {
-        instance.stop();
-        unsubscribe = subscribeIntro(() => instance?.start());
-      }
       setLenis(instance);
     });
 
     return () => {
       cancelled = true;
-      unsubscribe?.();
       gsap.ticker.remove(tick);
       instance?.destroy();
       setLenis(null);

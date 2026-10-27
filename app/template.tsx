@@ -25,7 +25,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
   }, [onPageMount]);
 
   return (
-    <motion.div initial={first ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, ease: EASE, delay: 0.2 }}>
+    <motion.div initial={first ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, ease: EASE }}>
       {children}
     </motion.div>
   );
