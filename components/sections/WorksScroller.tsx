@@ -121,7 +121,6 @@ export function WorksScroller({ images }: { images: Img[] }) {
           <button
             key={img.src}
             type="button"
-            data-cursor="view"
             data-tone="dark"
             aria-label={`View larger: ${img.alt}`}
             onClick={(e) => {

@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import { Barlow_Condensed, Inter, JetBrains_Mono } from "next/font/google";
-import { Cursor } from "@/components/layout/Cursor";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { PageTransition } from "@/components/layout/PageTransition";
@@ -72,7 +71,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SmoothScroll>
           <PageTransition>
             <Preloader />
-            <Cursor />
             <ScrollProgress />
             <Header nav={nav} phone={site.phone} email={site.email} location={site.address.lines[2]} socials={site.socials} />
             <main id="main">{children}</main>

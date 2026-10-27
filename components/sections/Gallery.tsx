@@ -25,7 +25,6 @@ export function Gallery({ images }: { images: Img[] }) {
           <li key={img.src}>
             <button
               type="button"
-              data-cursor="view"
               onClick={(e) => {
                 opener.current = e.currentTarget;
                 setIndex(i);
@@ -139,7 +138,6 @@ export function Lightbox({ images, index, onIndex, onClose }: { images: Img[]; i
                 key={img.src}
                 custom={direction}
                 className="absolute inset-0 px-4 sm:px-20"
-                data-cursor="drag"
                 variants={{
                   enter: (d: number) => ({ x: `${d * 30}%`, opacity: 0 }),
                   center: { x: "0%", opacity: 1 },

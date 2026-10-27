@@ -425,14 +425,3 @@ html.lenis body {
   display: block;
 }
 
-/* Custom cursor: hide the native one, except where text input needs it. */
-html.has-cursor,
-html.has-cursor * {
-  cursor: none !important;
-}
-html.has-cursor :is(input, textarea, select, [contenteditable="true"]) {
-  cursor: text !important;
-}
-html.has-cursor select {
-  cursor: pointer !important;
-}

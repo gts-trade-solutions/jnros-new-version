@@ -28,7 +28,7 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL` and `FORMS_WE
 app/                      routes (server components), template.tsx, actions.ts, sitemap.ts, robots.ts
   about  solutions/[slug]  services/[slug]  gallery  contact
 components/
-  layout/                 Header, MegaMenu, MobileMenu, Footer, Preloader, PageTransition, SmoothScroll, Cursor
+  layout/                 Header, MegaMenu, MobileMenu, Footer, Preloader, PageTransition, SmoothScroll
   sections/               Hero, Stats, AboutIntro, ServicesGrid, ServiceCard, OfferingIndex, OfferingDetail,
                           CtaBanner, PageHero, Gallery (masonry + lightbox)
   ui/                     Button, MagneticButton, Magnetic, SplitText, Reveal, RevealImage, ParallaxImage,
@@ -81,7 +81,7 @@ Light by default: the tokens are on `:root` in `app/globals.css` (`--bg`, `--sur
 | Lightbox | Motion `AnimatePresence` | `Gallery.tsx` |
 | Card tilt + glare | Motion springs | `ui/Tilt.tsx` |
 | Offers showcase: photo stage with clip-path wipes, Ken Burns, rising titles and an auto-advancing timer | Motion + CSS keyframes | `sections/OffersShowcase.tsx` |
-| Cursor, magnetic buttons, scroll progress bar | Motion springs / `useScroll` | `layout/Cursor.tsx`, `ui/Magnetic.tsx`, `layout/ScrollProgress.tsx` |
+| Magnetic buttons, scroll progress bar | Motion springs / `useScroll` | `ui/Magnetic.tsx`, `layout/ScrollProgress.tsx` |
 | Footer Sea, Air & Land scene: plane, ship on rolling waves, truck | CSS keyframes (compositor) | `layout/FooterTransit.tsx`, `globals.css` (`cross-right`, `cross-left`, `waves`, `rock`, `hover`) |
 
 **Conventions**
@@ -89,7 +89,7 @@ Light by default: the tokens are on `:root` in `app/globals.css` (`--bg`, `--sur
 - Durations are 0.6–1.2s. Staggers are 0.06–0.12s, or 0.04s inside the mega menu.
 - Only `transform`, `opacity` and `clip-path` animate. The one exception is the route line's scrubbed `stroke-dashoffset` (a single SVG path).
 
-**Reduced motion.** Lenis, the cursor, magnetic pulls, card tilt, the showcase autocycle, pinning, parallax, the Ken Burns zoom, the name band, the route marker, the footer scene and the preloader are all off. Reveals become plain fades.
+**Reduced motion.** Lenis, magnetic pulls, card tilt, the showcase autocycle, pinning, parallax, the Ken Burns zoom, the name band, the route marker, the footer scene and the preloader are all off. Reveals become plain fades.
 
 **Off-screen loops pause.** The name band, the route marker and the footer scene stop while out of view.
 

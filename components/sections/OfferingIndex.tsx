@@ -44,7 +44,7 @@ export function OfferingIndex({ kind, title, path, image, heading, text, items }
         <div className="container-x space-y-24 lg:space-y-36">
           {items.map((o, i) => (
             <article key={o.slug} className="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
-              <Link href={o.href} data-cursor="view" tabIndex={-1} aria-hidden="true" className={cn("group block lg:col-span-7", i % 2 === 1 && "lg:order-2")}>
+              <Link href={o.href} tabIndex={-1} aria-hidden="true" className={cn("group block lg:col-span-7", i % 2 === 1 && "lg:order-2")}>
                 <RevealImage
                   image={o.image}
                   sizes="(min-width: 1024px) 58vw, 100vw"

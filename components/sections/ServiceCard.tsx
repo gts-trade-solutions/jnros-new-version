@@ -13,7 +13,7 @@ import type { Offering } from "@/lib/data";
  */
 export function ServiceCard({ service, sizes }: { service: Offering; sizes: string }) {
   return (
-    <Link href={service.href} data-cursor="view" data-tone="dark" className="group relative block aspect-[3/4.2] overflow-hidden rounded-xs bg-surface-2">
+    <Link href={service.href} data-tone="dark" className="group relative block aspect-[3/4.2] overflow-hidden rounded-xs bg-surface-2">
       {/* [data-reveal-zoom] settles from 1.25x during the scroll reveal; the hover zoom is on the image itself. */}
       <div data-reveal-zoom className="absolute inset-0">
         <Image
