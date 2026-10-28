@@ -190,6 +190,11 @@
   color-scheme: dark;
 }
 
+/* The logo is drawn on white and its navy lettering disappears over a photo, so it gets a white plate there. */
+:root:has([data-hero]) [data-over-hero] [data-logo-plate] {
+  background-color: #fff;
+}
+
 /* Devices that actually hover (mouse/trackpad). Touch devices get the "revealed" state by default. */
 @custom-variant can-hover {
   @media (hover: hover) and (pointer: fine) {

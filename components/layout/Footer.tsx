@@ -17,7 +17,7 @@ export function Footer() {
       <Reveal batch stagger={0.1} className="container-x grid gap-14 py-20 lg:grid-cols-12 lg:py-28">
         <div className="space-y-9 lg:col-span-4">
           <Link href="/" className="inline-block">
-            <Logo className="text-[1.375rem]" />
+            <Logo className="h-auto w-72 sm:w-80" sizes="320px" loading="lazy" />
           </Link>
           <p className="max-w-sm text-muted">{site.description}</p>
 
