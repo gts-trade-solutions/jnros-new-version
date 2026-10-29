@@ -19,13 +19,15 @@ type Props = {
   preload?: boolean;
   /** Decorative backgrounds pass alt="" (the section text carries the meaning). */
   decorative?: boolean;
+  /** Laid over the photo and moving with it, e.g. a LoopVideo of which the photo is the poster. */
+  children?: React.ReactNode;
 };
 
 /**
  * Background photo that moves slower than the page (scrubbed ScrollTrigger on yPercent).
  * The image is oversized by the travel distance so its edges never show. Static for reduced motion.
  */
-export function ParallaxImage({ image, sizes = "100vw", className, mode = "section", amount = 12, preload = false, decorative = false }: Props) {
+export function ParallaxImage({ image, sizes = "100vw", className, mode = "section", amount = 12, preload = false, decorative = false, children }: Props) {
   const root = useRef<HTMLDivElement>(null);
   const inner = useRef<HTMLDivElement>(null);
 
@@ -56,6 +58,7 @@ export function ParallaxImage({ image, sizes = "100vw", className, mode = "secti
     <div ref={root} className={cn("overflow-hidden", className)}>
       <div ref={inner} className="absolute inset-x-0" style={oversize}>
         <Image src={image.src} alt={decorative ? "" : image.alt} fill sizes={sizes} preload={preload} fetchPriority={preload ? "high" : undefined} className="object-cover" />
+        {children}
       </div>
     </div>
   );

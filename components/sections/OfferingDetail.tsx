@@ -29,7 +29,7 @@ export function OfferingDetail({ item, all, kind, parent }: Props) {
     <>
       <JsonLd data={offeringJsonLd(item)} />
       <JsonLd data={breadcrumbJsonLd([{ label: "Home", href: "/" }, ...crumbs])} />
-      <PageHero label={`${item.number} / ${kind}`} title={item.title} image={item.image} crumbs={crumbs} size="md" />
+      <PageHero label={`${item.number} / ${kind}`} title={item.title} image={item.image} video={item.video} crumbs={crumbs} size="md" />
 
       <section aria-label={item.title} className="py-24 lg:py-36">
         <div className="container-x grid gap-16 lg:grid-cols-12">

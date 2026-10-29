@@ -30,21 +30,22 @@ app/                      routes (server components), template.tsx, actions.ts, 
 components/
   layout/                 Header, MegaMenu, MobileMenu, Footer, PageTransition, SmoothScroll
   sections/               Hero, Stats, AboutIntro, ServicesGrid, ServiceCard, OfferingIndex, OfferingDetail,
-                          CtaBanner, PageHero, Gallery (masonry + lightbox)
-  ui/                     Button, MagneticButton, Magnetic, SplitText, Reveal, RevealImage, ParallaxImage,
+                          CtaBanner, PageHero, VideoBand, Gallery (masonry + lightbox)
+  ui/                     Button, MagneticButton, Magnetic, SplitText, Reveal, RevealImage, ParallaxImage, LoopVideo,
                           Counter, SectionLabel, GridLines, Breadcrumbs, JsonLd, Logo, Icon, …
   forms/                  ContactForm, Field
 hooks/                    useMediaQuery, useReducedMotion, useIdleGSAP
 lib/
   data.ts                 ALL content: solutions, services, home / about copy, nav, site details
-  images.ts               photo helper for /public/images
+  images.ts               photo and clip helpers for /public/images and /public/videos
   image-loader.ts         next/image loader for the pre-built WebP sizes (widths in image-widths.json)
   seo.ts                  metadata builder + JSON-LD (LocalBusiness, Service, BreadcrumbList)
   schemas.ts              zod schema shared by the contact form and its server action
   gsap.ts  motion.ts      animation setup and the shared easing / duration / media-query constants
-public/images/            photography from jnroslogistics.com
+public/images/            photography from jnroslogistics.com, and the video poster frames
+public/videos/            background clips, 1080p + 720p H.264 (scripts/encode-video.mjs)
 public/img/               generated WebP sizes (scripts/optimize-images.mjs, not committed)
-scripts/                  optimize-images.mjs
+scripts/                  optimize-images.mjs, encode-video.mjs
 ```
 
 Pages are server components. Anything interactive or animated is a `"use client"` leaf component, so all text is in the server-rendered HTML.
@@ -62,6 +63,14 @@ Pages, the sitemap and the JSON-LD all read from it. Add content only when it is
 **Photography** lives in `public/images/`; the `photo(file, alt, width, height)` helper records each file's real size so `next/image` knows its aspect ratio.
 
 **Image sizes are pre-built.** `npm run dev` and `npm run build` first run `scripts/optimize-images.mjs`, which writes every width `next/image` can request (from `lib/image-widths.json`) as a static WebP in `public/img/`. `lib/image-loader.ts` points `<Image>` at those files, so photos are plain CDN files from the first visit. On-demand optimization took 0.4–1.2s the first time each size was requested. The script is incremental, so after adding or replacing a photo it only encodes that one.
+
+**Background video.** The ODC Cargo Shipping, Heavy Lifting & Transportation and Overland Transport page heroes, and the film band on the home page, play a muted loop over its first frame. These clips are stock footage from Pexels (free licence, no attribution required; each is marked with its source in `lib/data.ts`) and are the only content not from the live site. To add or replace one (ideally with Jnros' own footage), with ffmpeg installed:
+
+```bash
+node scripts/encode-video.mjs path/to/source.mp4 my-clip --start 2 --end 14 --fade 1
+```
+
+This writes `public/videos/my-clip-1080.mp4` and `-720.mp4` (H.264, no audio, index at the front so playback starts while it downloads) and the poster `public/images/my-clip-poster.jpg`; then use `clip("my-clip", "alt text")` in `lib/data.ts`. `--fade` dissolves the end back into the start for a seamless loop; leave it out when the loop point is a cut. Keep loops around 10–14s: each 1080p second is about 0.5 MB. `LoopVideo` downloads a clip only once it is on screen and the page is idle, fades it in once it is actually playing (the poster shows until then), pauses it off-screen, and serves phones the 720p file. Reduced motion, Save-Data and 2G connections keep the poster.
 
 **Old URLs.** `next.config.ts` permanently redirects the WordPress site's URLs (`/about-us`, `/contact-us`, `/odc-cargo-shipping`, …) to their new paths.
 

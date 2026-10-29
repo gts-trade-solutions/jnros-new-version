@@ -3,11 +3,13 @@
  * in markup. Plain data only (no React), so it is safe to import from server and client code.
  *
  * Every word and photo comes from jnroslogistics.com. Keep it that way: add content here only
- * when it is published on the live site too.
+ * when it is published on the live site too. The one exception is the background video clips
+ * (clip(...)), which are stock footage from Pexels (free licence, no attribution required); each is
+ * marked with its source. Swap in Jnros' own footage with scripts/encode-video.mjs when there is some.
  */
-import { type Img, photo } from "./images";
+import { clip, type Img, photo, type Video } from "./images";
 
-export type { Img };
+export type { Img, Video };
 
 /* ------------------------------------------------------------------------ */
 /* Types                                                                     */
@@ -27,6 +29,8 @@ export type Offering = {
   /** Body paragraphs on the detail page. */
   body: string[];
   image: Img;
+  /** Background loop for the page hero, in place of the photo there (the photo stays beside the text). */
+  video?: Video;
   href: string;
 };
 
@@ -71,6 +75,9 @@ const offering = (base: string, number: number, o: Omit<Offering, "number" | "hr
   href: `${base}/${o.slug}`,
 });
 
+// Stock: pexels.com/video/8961953. On the ODC page and in the home film band.
+const odcClip = clip("odc-pressure-vessel-ghat", "Aerial view of a pressure vessel on a multi-axle beam trailer climbing a winding hill road");
+
 export const solutions: Offering[] = [
   {
     slug: "odc-cargo-shipping",
@@ -83,6 +90,7 @@ export const solutions: Offering[] = [
       "With strategic planning and technical expertise, we deliver ODC shipments efficiently while minimizing risks and operational disruptions.",
     ],
     image: photo("odc-cargo-shipping.jpeg", "Locomotives loaded on multi-axle trailers for an over-dimensional move", 1280, 960),
+    video: odcClip,
   },
   {
     slug: "break-bulk-shipping",
@@ -167,6 +175,8 @@ export const solutions: Offering[] = [
       "From on-site lifting to final delivery, we execute each movement with precision, efficiency, and operational discipline.",
     ],
     image: photo("heavy-lifting-transportation.jpeg", "Locomotive carried on a multi-axle hydraulic trailer", 1280, 960),
+    // Stock: pexels.com/video/36649711
+    video: clip("heavy-lift-wind-blade", "Crawler cranes lifting a wind turbine blade at a wind farm"),
   },
 ].map((o, i) => offering("/solutions", i + 1, o));
 
@@ -222,6 +232,8 @@ export const services: Offering[] = [
       "With a strong focus on reliability and efficiency, our overland transport solutions support seamless connectivity between ports, warehouses, and final destinations.",
     ],
     image: photo("overland-transport.avif", "Container truck at a port terminal", 740, 493),
+    // Stock: pexels.com/video/32034324
+    video: clip("odc-fuselage-convoy", "Aerial view of an aircraft fuselage on a trailer moving under escort along a highway"),
   },
   {
     slug: "warehousing-and-distribution",
@@ -321,6 +333,18 @@ export const hero = {
     { image: photo("hero-port-aerial.jpg", "Aerial view of a container port with a ship heading out to sea", 1500, 999), caption: "Moving Industrial Cargo, Powering Progress" },
     { image: photo("hero-vessel-transport.jpeg", "Industrial vessel loaded on a multi-axle trailer", 1280, 720), caption: "Where Technical Expertise Meets Global Reach" },
   ],
+};
+
+/** Home film band: the ODC clip behind the ODC page's title and opening paragraph, and the steps its second paragraph names. */
+const odc = solutions[0];
+export const odcFilm = {
+  label: "Over Dimensional Cargo",
+  title: odc.title,
+  accent: ["ODC"],
+  text: odc.body[0],
+  points: ["Route surveys", "Risk assessments", "Permit arrangements", "Escort vehicles", "Specialized trailers"],
+  cta: { label: odc.title, href: odc.href },
+  video: odcClip,
 };
 
 export const stats = [

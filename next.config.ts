@@ -23,7 +23,11 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     // File names aren't content-hashed, so cache for a day and revalidate in the background after.
-    return [{ source: "/img/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }] }];
+    const cache = [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }];
+    return [
+      { source: "/img/:path*", headers: cache },
+      { source: "/videos/:path*", headers: cache },
+    ];
   },
   // The previous WordPress site served every page from the root (/about-us/, /odc-cargo-shipping/…).
   // Send those URLs to their new homes so existing links and search results keep working.

@@ -7,12 +7,13 @@ import { OffersShowcase } from "@/components/sections/OffersShowcase";
 import { RouteBand } from "@/components/sections/RouteBand";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { Stats } from "@/components/sections/Stats";
+import { VideoBand } from "@/components/sections/VideoBand";
 import { WorksScroller } from "@/components/sections/WorksScroller";
 import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { SplitText } from "@/components/ui/SplitText";
-import { aboutIntro, hero, offers, recentWorks, routeModes, services, servicesIntro, solutions, spaces, specialised, whyChooseUs } from "@/lib/data";
+import { aboutIntro, hero, odcFilm, offers, recentWorks, routeModes, services, servicesIntro, solutions, spaces, specialised, whyChooseUs } from "@/lib/data";
 
 /*
  * Section order follows jnroslogistics.com. Everything after the hero sits in its own Suspense
@@ -41,6 +42,9 @@ export default function HomePage() {
           more={{ label: "All solutions", href: "/solutions" }}
           className="border-t border-border"
         />
+      </Suspense>
+      <Suspense>
+        <VideoBand {...odcFilm} />
       </Suspense>
       <Suspense>
         <Offers />
