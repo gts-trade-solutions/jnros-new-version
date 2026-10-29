@@ -64,7 +64,7 @@ Pages, the sitemap and the JSON-LD all read from it. Add content only when it is
 
 **Image sizes are pre-built.** `npm run dev` and `npm run build` first run `scripts/optimize-images.mjs`, which writes every width `next/image` can request (from `lib/image-widths.json`) as a static WebP in `public/img/`. `lib/image-loader.ts` points `<Image>` at those files, so photos are plain CDN files from the first visit. On-demand optimization took 0.4–1.2s the first time each size was requested. The script is incremental, so after adding or replacing a photo it only encodes that one.
 
-**Background video.** The ODC Cargo Shipping, Heavy Lifting & Transportation and Overland Transport page heroes, and the film band on the home page, play a muted loop over its first frame. These clips are stock footage from Pexels (free licence, no attribution required; each is marked with its source in `lib/data.ts`) and are the only content not from the live site. To add or replace one (ideally with Jnros' own footage), with ffmpeg installed:
+**Background video.** The heroes of all 8 solution pages and of the International Ocean Freight, Overland Transport, Warehousing and Distribution and Project and Heavy Cargo service pages, and the film band on the home page, play a muted loop over its first frame (an offering's `video` in `lib/data.ts`). These clips are stock footage from Pexels (free licence, no attribution required; each is marked with its source in `lib/data.ts`) and are the only content not from the live site. To add or replace one (ideally with Jnros' own footage), with ffmpeg installed:
 
 ```bash
 node scripts/encode-video.mjs path/to/source.mp4 my-clip --start 2 --end 14 --fade 1

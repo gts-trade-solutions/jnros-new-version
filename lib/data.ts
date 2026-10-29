@@ -103,6 +103,8 @@ export const solutions: Offering[] = [
       "With strong global partnerships, we provide dependable and cost-effective break bulk logistics solutions.",
     ],
     image: photo("break-bulk-shipping.jpg", "Steel pipes stowed as break bulk cargo between a vessel's deck cranes", 740, 493),
+    // Stock: pexels.com/video/4778067
+    video: clip("breakbulk-quay-loading", "Aerial view of a general cargo ship loading at a quay stacked with timber and steel"),
   },
   {
     slug: "ro-ro-shipping",
@@ -115,6 +117,8 @@ export const solutions: Offering[] = [
       "With reliable scheduling and professional oversight, we ensure safe and timely delivery of Ro-Ro cargo worldwide.",
     ],
     image: photo("ro-ro-shipping.jpg", "Wheeled cargo driven up the stern ramp of a Ro-Ro vessel", 820, 533),
+    // Stock: pexels.com/video/19073598
+    video: clip("roro-vessel-tug", "Aerial view of a Ro-Ro vehicle carrier under way with a tug in its wake"),
   },
   {
     slug: "bulk-carrier-shipping",
@@ -127,6 +131,8 @@ export const solutions: Offering[] = [
       "From origin port coordination to final discharge, Jnros Logistics ensures secure handling, regulatory compliance, and reliable execution of bulk commodity shipments worldwide.",
     ],
     image: photo("bulk-carrier-shipping.jpg", "Bulk carrier with deck cranes transferring cargo to a barge at sea", 740, 493),
+    // Stock: pexels.com/video/1474411
+    video: clip("geared-bulk-carrier", "Aerial view of a geared bulk carrier at anchor"),
   },
   {
     slug: "ship-brokering",
@@ -139,6 +145,8 @@ export const solutions: Offering[] = [
       "Our goal is to ensure dependable vessel placement with smooth coordination from fixture to completion.",
     ],
     image: photo("ship-brokering.avif", "Cargo ship berthed beside port cranes", 740, 492),
+    // Stock: pexels.com/video/11015515
+    video: clip("bulk-carrier-harbour-tugs", "Aerial view of a bulk carrier leaving harbour escorted by tugs"),
   },
   {
     slug: "heavy-lift-chartering-industrial-movers",
@@ -151,6 +159,8 @@ export const solutions: Offering[] = [
       "With strong execution capabilities, we deliver safe and efficient solutions for challenging industrial logistics projects.",
     ],
     image: photo("heavy-lift-chartering.jpg", "Process column on modular transporters beneath a heavy lift vessel's cranes", 700, 400),
+    // Stock: pexels.com/video/16672728
+    video: clip("floating-crane-barge", "Floating crane barge on open water"),
   },
   {
     slug: "heavy-cargo-loadout-operations",
@@ -163,6 +173,8 @@ export const solutions: Offering[] = [
       "Through meticulous supervision and safety-driven procedures, we ensure controlled and reliable offshore dispatch operations.",
     ],
     image: photo("heavy-cargo-loadout.jpg", "Container ship being loaded by gantry cranes at a terminal", 1600, 899),
+    // Stock: pexels.com/video/30916173
+    video: clip("berth-cranes-project-cargo", "Aerial view of cranes working a ship at the berth, with large steel sections on the quay"),
   },
   {
     slug: "heavy-lifting-transportation",
@@ -219,6 +231,8 @@ export const services: Offering[] = [
       "Backed by a strong global network, Jnros Logistics ensures safe, reliable, and cost-effective ocean freight services tailored to your business needs.",
     ],
     image: photo("international-ocean-freight.avif", "Loaded container ship sailing out of a port", 740, 493),
+    // Stock: pexels.com/video/8344449
+    video: clip("container-terminal-pier", "Aerial view of a container ship under gantry cranes, with a truck on the pier"),
   },
   {
     slug: "overland-transport",
@@ -247,6 +261,8 @@ export const services: Offering[] = [
       "With a focus on safety, organization, and efficiency, our warehousing services add value by optimizing storage and distribution processes.",
     ],
     image: photo("warehousing-and-distribution.avif", "Forklift in a warehouse aisle lined with stacked cartons", 740, 470),
+    // Stock: pexels.com/video/20654640
+    video: clip("yard-aerial-topdown", "Overhead view of trucks, forklifts and stacked materials in a distribution yard"),
   },
   {
     slug: "dangerous-goods-handling",
@@ -286,6 +302,8 @@ export const services: Offering[] = [
       "With proven expertise and specialized handling capabilities, we deliver project and heavy cargo solutions that meet the highest standards of safety, accuracy, and reliability.",
     ],
     image: photo("project-and-heavy-cargo.avif", "Trucks and workers at a busy container port", 740, 415),
+    // Stock: pexels.com/video/20654632
+    video: clip("yard-flatbed-loading", "Aerial view of a forklift loading equipment onto flatbed trucks in an industrial yard"),
   },
 ].map((o, i) => offering("/services", i + 1, o));
 

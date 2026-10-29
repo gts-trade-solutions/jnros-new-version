@@ -12,8 +12,9 @@
  * H.264 because every phone and browser decodes it in hardware: playback stays smooth and light on
  * battery. No audio track. "faststart" moves the index to the front of the file, so playback starts
  * from the first bytes instead of after the whole download. Frame rates above 30 are halved (a
- * background loop doesn't need 60fps, and it halves the file). Needs ffmpeg on the PATH; the outputs
- * are committed, so building the site doesn't.
+ * background loop doesn't need 60fps, and it halves the file), and other aspect ratios are cropped
+ * to 16:9 from the centre, so every clip and poster has the same size. Needs ffmpeg on the PATH; the
+ * outputs are committed, so building the site doesn't.
  */
 import { execFileSync } from "node:child_process";
 import { mkdirSync, statSync } from "node:fs";
@@ -43,10 +44,12 @@ const fade = Number(values.fade);
 // A fade loop starts `fade` seconds in, and its last `fade` seconds dissolve into the source's
 // first `fade` seconds: the final frame matches the first, so the loop is seamless.
 const trim = (from, to) => `trim=start=${from}:end=${to},setpts=PTS-STARTPTS`;
+// Scale to cover w×h, then crop the overflow from the centre.
+const fit = (w, h) => `scale=${w}:${h}:force_original_aspect_ratio=increase:flags=lanczos,crop=${w}:${h}`;
 const body = fade
   ? `[0:v]${trim(start + fade, end)}[a];[0:v]${trim(start, start + fade)}[b];[a][b]xfade=transition=fade:duration=${fade}:offset=${end - start - 2 * fade}[clip]`
   : `[0:v]${trim(start, end)}[clip]`;
-const graph = `${body};[clip]fps=${fps},hqdn3d=1.5:1.5:6:6,format=yuv420p,split=2[x][y];[x]scale=-2:1080:flags=lanczos[hd];[y]scale=-2:720:flags=lanczos[sd]`;
+const graph = `${body};[clip]fps=${fps},hqdn3d=1.5:1.5:6:6,format=yuv420p,split=2[x][y];[x]${fit(1920, 1080)}[hd];[y]${fit(1280, 720)}[sd]`;
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const videos = join(root, "public/videos");
