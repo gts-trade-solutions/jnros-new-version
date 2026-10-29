@@ -3,9 +3,10 @@
  * in markup. Plain data only (no React), so it is safe to import from server and client code.
  *
  * Every word and photo comes from jnroslogistics.com. Keep it that way: add content here only
- * when it is published on the live site too. The one exception is the background video clips
- * (clip(...)), which are stock footage from Pexels (free licence, no attribution required); each is
- * marked with its source. Swap in Jnros' own footage with scripts/encode-video.mjs when there is some.
+ * when it is published on the live site too. The exceptions are the background video clips (the
+ * `clips` table) and the About photo, which are stock from Pexels (free licence, no attribution
+ * required), each marked with its source. Swap in Jnros' own footage with scripts/encode-video.mjs
+ * when there is some.
  */
 import { clip, type Img, photo, type Video } from "./images";
 
@@ -75,8 +76,24 @@ const offering = (base: string, number: number, o: Omit<Offering, "number" | "hr
   href: `${base}/${o.slug}`,
 });
 
-// Stock: pexels.com/video/8961953. On the ODC page and in the home film band.
-const odcClip = clip("odc-pressure-vessel-ghat", "Aerial view of a pressure vessel on a multi-axle beam trailer climbing a winding hill road");
+/**
+ * Background loops (see clip() in images.ts): the page heroes, the home hero and the home film band.
+ * Stock footage from Pexels (free licence, no attribution required), each with its source video id.
+ */
+const clips = {
+  odc: clip("odc-pressure-vessel-ghat", "Aerial view of a pressure vessel on a multi-axle beam trailer climbing a winding hill road"), // pexels.com/video/8961953
+  breakbulk: clip("breakbulk-quay-loading", "Aerial view of a general cargo ship loading at a quay stacked with timber and steel"), // pexels.com/video/4778067
+  roro: clip("roro-vessel-tug", "Aerial view of a Ro-Ro vehicle carrier under way with a tug in its wake"), // pexels.com/video/19073598
+  bulkCarrier: clip("geared-bulk-carrier", "Aerial view of a geared bulk carrier at anchor"), // pexels.com/video/1474411
+  harbourTugs: clip("bulk-carrier-harbour-tugs", "Aerial view of a bulk carrier leaving harbour escorted by tugs"), // pexels.com/video/11015515
+  floatingCrane: clip("floating-crane-barge", "Floating crane barge on open water"), // pexels.com/video/16672728
+  berthCranes: clip("berth-cranes-project-cargo", "Aerial view of cranes working a ship at the berth, with large steel sections on the quay"), // pexels.com/video/30916173
+  windBlade: clip("heavy-lift-wind-blade", "Crawler cranes lifting a wind turbine blade at a wind farm"), // pexels.com/video/36649711
+  containerTerminal: clip("container-terminal-pier", "Aerial view of a container ship under gantry cranes, with a truck on the pier"), // pexels.com/video/8344449
+  fuselage: clip("odc-fuselage-convoy", "Aerial view of an aircraft fuselage on a trailer moving under escort along a highway"), // pexels.com/video/32034324
+  yardTopdown: clip("yard-aerial-topdown", "Overhead view of trucks, forklifts and stacked materials in a distribution yard"), // pexels.com/video/20654640
+  yardFlatbed: clip("yard-flatbed-loading", "Aerial view of a forklift loading equipment onto flatbed trucks in an industrial yard"), // pexels.com/video/20654632
+};
 
 export const solutions: Offering[] = [
   {
@@ -90,7 +107,7 @@ export const solutions: Offering[] = [
       "With strategic planning and technical expertise, we deliver ODC shipments efficiently while minimizing risks and operational disruptions.",
     ],
     image: photo("odc-cargo-shipping.jpeg", "Locomotives loaded on multi-axle trailers for an over-dimensional move", 1280, 960),
-    video: odcClip,
+    video: clips.odc,
   },
   {
     slug: "break-bulk-shipping",
@@ -103,8 +120,7 @@ export const solutions: Offering[] = [
       "With strong global partnerships, we provide dependable and cost-effective break bulk logistics solutions.",
     ],
     image: photo("break-bulk-shipping.jpg", "Steel pipes stowed as break bulk cargo between a vessel's deck cranes", 740, 493),
-    // Stock: pexels.com/video/4778067
-    video: clip("breakbulk-quay-loading", "Aerial view of a general cargo ship loading at a quay stacked with timber and steel"),
+    video: clips.breakbulk,
   },
   {
     slug: "ro-ro-shipping",
@@ -117,8 +133,7 @@ export const solutions: Offering[] = [
       "With reliable scheduling and professional oversight, we ensure safe and timely delivery of Ro-Ro cargo worldwide.",
     ],
     image: photo("ro-ro-shipping.jpg", "Wheeled cargo driven up the stern ramp of a Ro-Ro vessel", 820, 533),
-    // Stock: pexels.com/video/19073598
-    video: clip("roro-vessel-tug", "Aerial view of a Ro-Ro vehicle carrier under way with a tug in its wake"),
+    video: clips.roro,
   },
   {
     slug: "bulk-carrier-shipping",
@@ -131,8 +146,7 @@ export const solutions: Offering[] = [
       "From origin port coordination to final discharge, Jnros Logistics ensures secure handling, regulatory compliance, and reliable execution of bulk commodity shipments worldwide.",
     ],
     image: photo("bulk-carrier-shipping.jpg", "Bulk carrier with deck cranes transferring cargo to a barge at sea", 740, 493),
-    // Stock: pexels.com/video/1474411
-    video: clip("geared-bulk-carrier", "Aerial view of a geared bulk carrier at anchor"),
+    video: clips.bulkCarrier,
   },
   {
     slug: "ship-brokering",
@@ -145,8 +159,7 @@ export const solutions: Offering[] = [
       "Our goal is to ensure dependable vessel placement with smooth coordination from fixture to completion.",
     ],
     image: photo("ship-brokering.avif", "Cargo ship berthed beside port cranes", 740, 492),
-    // Stock: pexels.com/video/11015515
-    video: clip("bulk-carrier-harbour-tugs", "Aerial view of a bulk carrier leaving harbour escorted by tugs"),
+    video: clips.harbourTugs,
   },
   {
     slug: "heavy-lift-chartering-industrial-movers",
@@ -159,8 +172,7 @@ export const solutions: Offering[] = [
       "With strong execution capabilities, we deliver safe and efficient solutions for challenging industrial logistics projects.",
     ],
     image: photo("heavy-lift-chartering.jpg", "Process column on modular transporters beneath a heavy lift vessel's cranes", 700, 400),
-    // Stock: pexels.com/video/16672728
-    video: clip("floating-crane-barge", "Floating crane barge on open water"),
+    video: clips.floatingCrane,
   },
   {
     slug: "heavy-cargo-loadout-operations",
@@ -173,8 +185,7 @@ export const solutions: Offering[] = [
       "Through meticulous supervision and safety-driven procedures, we ensure controlled and reliable offshore dispatch operations.",
     ],
     image: photo("heavy-cargo-loadout.jpg", "Container ship being loaded by gantry cranes at a terminal", 1600, 899),
-    // Stock: pexels.com/video/30916173
-    video: clip("berth-cranes-project-cargo", "Aerial view of cranes working a ship at the berth, with large steel sections on the quay"),
+    video: clips.berthCranes,
   },
   {
     slug: "heavy-lifting-transportation",
@@ -187,8 +198,7 @@ export const solutions: Offering[] = [
       "From on-site lifting to final delivery, we execute each movement with precision, efficiency, and operational discipline.",
     ],
     image: photo("heavy-lifting-transportation.jpeg", "Locomotive carried on a multi-axle hydraulic trailer", 1280, 960),
-    // Stock: pexels.com/video/36649711
-    video: clip("heavy-lift-wind-blade", "Crawler cranes lifting a wind turbine blade at a wind farm"),
+    video: clips.windBlade,
   },
 ].map((o, i) => offering("/solutions", i + 1, o));
 
@@ -231,8 +241,7 @@ export const services: Offering[] = [
       "Backed by a strong global network, Jnros Logistics ensures safe, reliable, and cost-effective ocean freight services tailored to your business needs.",
     ],
     image: photo("international-ocean-freight.avif", "Loaded container ship sailing out of a port", 740, 493),
-    // Stock: pexels.com/video/8344449
-    video: clip("container-terminal-pier", "Aerial view of a container ship under gantry cranes, with a truck on the pier"),
+    video: clips.containerTerminal,
   },
   {
     slug: "overland-transport",
@@ -246,8 +255,7 @@ export const services: Offering[] = [
       "With a strong focus on reliability and efficiency, our overland transport solutions support seamless connectivity between ports, warehouses, and final destinations.",
     ],
     image: photo("overland-transport.avif", "Container truck at a port terminal", 740, 493),
-    // Stock: pexels.com/video/32034324
-    video: clip("odc-fuselage-convoy", "Aerial view of an aircraft fuselage on a trailer moving under escort along a highway"),
+    video: clips.fuselage,
   },
   {
     slug: "warehousing-and-distribution",
@@ -261,8 +269,7 @@ export const services: Offering[] = [
       "With a focus on safety, organization, and efficiency, our warehousing services add value by optimizing storage and distribution processes.",
     ],
     image: photo("warehousing-and-distribution.avif", "Forklift in a warehouse aisle lined with stacked cartons", 740, 470),
-    // Stock: pexels.com/video/20654640
-    video: clip("yard-aerial-topdown", "Overhead view of trucks, forklifts and stacked materials in a distribution yard"),
+    video: clips.yardTopdown,
   },
   {
     slug: "dangerous-goods-handling",
@@ -302,8 +309,7 @@ export const services: Offering[] = [
       "With proven expertise and specialized handling capabilities, we deliver project and heavy cargo solutions that meet the highest standards of safety, accuracy, and reliability.",
     ],
     image: photo("project-and-heavy-cargo.avif", "Trucks and workers at a busy container port", 740, 415),
-    // Stock: pexels.com/video/20654632
-    video: clip("yard-flatbed-loading", "Aerial view of a forklift loading equipment onto flatbed trucks in an industrial yard"),
+    video: clips.yardFlatbed,
   },
 ].map((o, i) => offering("/services", i + 1, o));
 
@@ -341,19 +347,23 @@ export const recentWorks: Img[] = [
 /* Home                                                                      */
 /* ------------------------------------------------------------------------ */
 
+/** A home hero slide: a background loop over its poster frame (or, without `video`, a still photo). */
+export type HeroSlide = { image: Img; video?: Video; caption: string };
+const reel = (video: Video, caption: string): HeroSlide => ({ image: video.poster, video, caption });
+
 export const hero = {
   eyebrow: "Project Cargo · Breakbulk · ODC · Heavy Lift",
   lines: ["Engineered", "Logistics for", "Complex Cargo"],
   intro: site.description,
   slides: [
-    { image: photo("hero-container-ship-port.jpg", "Container ship berthed beneath gantry cranes", 1500, 1000), caption: "Delivering Precision Across Global Trade Routes" },
-    { image: photo("hero-transformer-transport.jpeg", "Transformer carried on a multi-axle hydraulic trailer along a highway", 1600, 900), caption: "Engineered Logistics Without Boundaries" },
-    { image: photo("hero-port-aerial.jpg", "Aerial view of a container port with a ship heading out to sea", 1500, 999), caption: "Moving Industrial Cargo, Powering Progress" },
-    { image: photo("hero-vessel-transport.jpeg", "Industrial vessel loaded on a multi-axle trailer", 1280, 720), caption: "Where Technical Expertise Meets Global Reach" },
+    reel(clips.odc, "Engineered Logistics Without Boundaries"),
+    reel(clips.containerTerminal, "Delivering Precision Across Global Trade Routes"),
+    reel(clips.breakbulk, "Moving Industrial Cargo, Powering Progress"),
+    reel(clips.bulkCarrier, "Where Technical Expertise Meets Global Reach"),
   ],
 };
 
-/** Home film band: the ODC clip behind the ODC page's title and opening paragraph, and the steps its second paragraph names. */
+/** Home film band: an ODC road move behind the ODC page's title and opening paragraph, and the steps its second paragraph names. */
 const odc = solutions[0];
 export const odcFilm = {
   label: "Over Dimensional Cargo",
@@ -362,7 +372,7 @@ export const odcFilm = {
   text: odc.body[0],
   points: ["Route surveys", "Risk assessments", "Permit arrangements", "Escort vehicles", "Specialized trailers"],
   cta: { label: odc.title, href: odc.href },
-  video: odcClip,
+  video: clips.fuselage,
 };
 
 export const stats = [
@@ -384,7 +394,8 @@ export const aboutIntro = {
     "Jnros Logistics is a specialized logistics partner with strong expertise in Project Cargo, EPC logistics, Breakbulk, ODC, and Heavy Lift operations. While we provide international air and ocean freight services, our core strength lies in handling complex, oversized, and heavy-duty industrial cargo across major global trade routes.",
     "We deliver secure and time-sensitive cargo movements through international air freight, global air charter operations, and ocean transport—with particular focus on Breakbulk shipments, Out-of-Gauge (OOG) cargo, Over Dimensional Cargo (ODC), heavy lift consignments, and multi-package project movements. Every shipment is engineered with precision, ensuring technical compliance and operational efficiency.",
   ],
-  image: photo("pressure-vessel-transport.jpg", "Pressure vessel on a multi-axle modular trailer", 792, 594),
+  // Stock: pexels.com/photo/5961982
+  image: photo("heavy-machinery-lowbed-trailer.jpg", "Motor grader loaded on a multi-axle low-bed trailer at sunset", 2400, 1797),
 };
 
 export const specialised = {

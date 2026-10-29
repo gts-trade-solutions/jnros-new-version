@@ -190,9 +190,16 @@
   color-scheme: dark;
 }
 
-/* The logo is drawn on white and its navy lettering disappears over a photo, so it gets a white plate there. */
-:root:has([data-hero]) [data-over-hero] [data-logo-plate] {
-  background-color: #fff;
+/* The logo's navy lettering disappears over a photo, so the header swaps to its white version there. */
+[data-logo] {
+  transition: opacity 0.5s;
+}
+[data-logo="light"],
+:root:has([data-hero]) [data-over-hero] [data-logo="colour"] {
+  opacity: 0;
+}
+:root:has([data-hero]) [data-over-hero] [data-logo="light"] {
+  opacity: 1;
 }
 
 /* Devices that actually hover (mouse/trackpad). Touch devices get the "revealed" state by default. */

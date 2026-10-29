@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useInView } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import { LoopVideo } from "@/components/ui/LoopVideo";
 import { Reveal } from "@/components/ui/Reveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { Offering } from "@/lib/data";
@@ -19,7 +20,8 @@ const DWELL = "6s";
  *
  * - The stage shows the active item. Switching wipes the next photo up over the current one
  *   (clip-path) while it settles from a slight zoom, and the number and title rise in over it.
- * - The photo on stage pushes in slowly (Ken Burns). It cycles on its own while on screen. A green timer bar along the stage shows the dwell; its
+ * - The photo on stage pushes in slowly (Ken Burns). An item with a video plays it over the photo
+ *   while it is on stage (LoopVideo), so only the clip on stage downloads. It cycles on its own while on screen. A green timer bar along the stage shows the dwell; its
  *   animationend advances to the next item (CSS keyframes, like the hero), so hovering simply
  *   pauses the bar.
  * - Hovering or focusing a list item switches to it straight away; clicking opens its page.
@@ -72,6 +74,7 @@ export function OffersShowcase({ items, total }: { items: Offering[]; total: num
                   style={{ animationPlayState: playing ? "running" : "paused" }}
                 >
                   <Image src={s.image.src} alt={s.image.alt} fill sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" />
+                  {s.video && <LoopVideo video={s.video} active={i === active} />}
                 </div>
               </motion.div>
             </motion.div>

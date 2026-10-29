@@ -165,11 +165,8 @@ export function Header({ nav, phone, email, location, socials }: Props) {
           <div className="container-x relative flex h-full items-center justify-between gap-6">
             <Link href="/" className="shrink-0">
               <motion.span className="block origin-left" initial={false} animate={{ scale: scrolled ? 0.88 : 1 }} transition={{ duration: 0.5, ease: EASE }}>
-                {/* White plate behind the logo while the header is over a dark hero (globals.css). */}
-                <span data-logo-plate="" className="block rounded-xs px-2 py-1 transition-colors duration-500">
-                  {/* Eager: above the fold on every page. */}
-                  <Logo className="h-14 w-auto" sizes="160px" />
-                </span>
+                {/* White over a dark hero, colour once the bar turns light (globals.css). Eager: above the fold on every page. */}
+                <Logo className="h-14 w-auto" sizes="160px" adaptive />
               </motion.span>
             </Link>
 

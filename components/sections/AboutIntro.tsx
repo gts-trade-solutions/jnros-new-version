@@ -66,7 +66,8 @@ export function AboutIntro({ data }: Props) {
         <div className="pt-24 lg:sticky lg:top-0 lg:flex lg:h-svh lg:items-center lg:self-start lg:pt-0">
           <div data-uncrop className="relative aspect-[4/5] w-full overflow-hidden rounded-xs bg-surface-2 lg:aspect-auto lg:h-[78svh]">
             <div data-uncrop-img className="absolute inset-0">
-              <Image src={data.image.src} alt={data.image.alt} fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
+              {/* A landscape photo cropped into a tall frame renders ~1.6x wider than the frame. */}
+              <Image src={data.image.src} alt={data.image.alt} fill sizes="(min-width: 1024px) 70vw, 160vw" className="object-cover" />
             </div>
             {/* Engineering-drawing corner ticks */}
             {["left-4 top-4 border-l border-t", "right-4 top-4 border-r border-t", "bottom-4 left-4 border-b border-l", "bottom-4 right-4 border-b border-r"].map((pos) => (

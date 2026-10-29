@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import { Barlow_Condensed, Inter, JetBrains_Mono } from "next/font/google";
+import { FloatingActions } from "@/components/layout/FloatingActions";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { PageTransition } from "@/components/layout/PageTransition";
@@ -75,6 +76,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <Footer />
             </Suspense>
           </PageTransition>
+          <FloatingActions />
         </SmoothScroll>
         <JsonLd data={organizationJsonLd()} />
       </body>

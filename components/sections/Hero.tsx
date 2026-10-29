@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { GridLines } from "@/components/ui/GridLines";
+import { LoopVideo } from "@/components/ui/LoopVideo";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { useIdleGSAP } from "@/hooks/useIdleGSAP";
 import type { hero as heroData } from "@/lib/data";
@@ -19,7 +20,8 @@ type Props = typeof heroData;
  * Full-viewport hero.
  *
  * Slideshow: slides crossfade (1.6s, Motion) while the active one slowly zooms 1 → 1.1 over 8s
- * (Ken Burns). The zoom and the 7s timer bar are CSS keyframes, so they run on the compositor
+ * (Ken Burns). A slide with a video plays it (LoopVideo) over its poster while it is the active one,
+ * from the start each time, so only the clip on screen downloads. The zoom and the 7s timer bar are CSS keyframes, so they run on the compositor
  * with no per-frame JavaScript; the bar's animationend advances to the next slide, so pausing the
  * bar (hero off-screen) pauses the slideshow too. An outgoing slide keeps its zoom while it fades.
  *
@@ -96,15 +98,18 @@ export function Hero({ eyebrow, lines, intro, slides }: Props) {
               style={playState}
             >
               {i <= loadedUpTo && (
-                <Image
-                  src={slide.image.src}
-                  alt={slide.image.alt}
-                  fill
-                  sizes="100vw"
-                  preload={i === 0}
-                  fetchPriority={i === 0 ? "high" : "low"}
-                  className="object-cover"
-                />
+                <>
+                  <Image
+                    src={slide.image.src}
+                    alt={slide.image.alt}
+                    fill
+                    sizes="100vw"
+                    preload={i === 0}
+                    fetchPriority={i === 0 ? "high" : "low"}
+                    className="object-cover"
+                  />
+                  {slide.video && <LoopVideo video={slide.video} active={i === active} />}
+                </>
               )}
             </div>
           </motion.div>
@@ -175,7 +180,8 @@ export function Hero({ eyebrow, lines, intro, slides }: Props) {
             </AnimatePresence>
           </p>
 
-          <div className="flex items-center gap-4">
+          {/* mr-16 keeps the slide controls clear of the floating chat button in the corner. */}
+          <div className="mr-16 flex items-center gap-4">
             <span className="hidden font-mono text-label tabular-nums text-text/60 sm:block">
               <span className="text-text">{pad2(active + 1)}</span> / {pad2(slides.length)}
             </span>

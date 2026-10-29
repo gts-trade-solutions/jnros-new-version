@@ -28,7 +28,8 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL` and `FORMS_WE
 app/                      routes (server components), template.tsx, actions.ts, sitemap.ts, robots.ts
   about  solutions/[slug]  services/[slug]  gallery  contact
 components/
-  layout/                 Header, MegaMenu, MobileMenu, Footer, PageTransition, SmoothScroll
+  layout/                 Header, MegaMenu, MobileMenu, Footer, PageTransition, SmoothScroll,
+                          FloatingActions (BackToTop + ChatAssistant)
   sections/               Hero, Stats, AboutIntro, ServicesGrid, ServiceCard, OfferingIndex, OfferingDetail,
                           CtaBanner, PageHero, VideoBand, Gallery (masonry + lightbox)
   ui/                     Button, MagneticButton, Magnetic, SplitText, Reveal, RevealImage, ParallaxImage, LoopVideo,
@@ -38,6 +39,7 @@ hooks/                    useMediaQuery, useReducedMotion, useIdleGSAP
 lib/
   data.ts                 ALL content: solutions, services, home / about copy, nav, site details
   images.ts               photo and clip helpers for /public/images and /public/videos
+  assistant.ts            the chat assistant's scripted answers (keyword matching over data.ts)
   image-loader.ts         next/image loader for the pre-built WebP sizes (widths in image-widths.json)
   seo.ts                  metadata builder + JSON-LD (LocalBusiness, Service, BreadcrumbList)
   schemas.ts              zod schema shared by the contact form and its server action
@@ -64,13 +66,17 @@ Pages, the sitemap and the JSON-LD all read from it. Add content only when it is
 
 **Image sizes are pre-built.** `npm run dev` and `npm run build` first run `scripts/optimize-images.mjs`, which writes every width `next/image` can request (from `lib/image-widths.json`) as a static WebP in `public/img/`. `lib/image-loader.ts` points `<Image>` at those files, so photos are plain CDN files from the first visit. On-demand optimization took 0.4–1.2s the first time each size was requested. The script is incremental, so after adding or replacing a photo it only encodes that one.
 
-**Background video.** The heroes of all 8 solution pages and of the International Ocean Freight, Overland Transport, Warehousing and Distribution and Project and Heavy Cargo service pages, and the film band on the home page, play a muted loop over its first frame (an offering's `video` in `lib/data.ts`). These clips are stock footage from Pexels (free licence, no attribution required; each is marked with its source in `lib/data.ts`) and are the only content not from the live site. To add or replace one (ideally with Jnros' own footage), with ffmpeg installed:
+**Background video.** The home hero slides, the home film band and the "Project logistics" showcase, and the heroes of all 8 solution pages and of the International Ocean Freight, Overland Transport, Warehousing and Distribution and Project and Heavy Cargo service pages, play a muted loop over its first frame (the `clips` table in `lib/data.ts`). In the slideshows only the clip on screen plays and downloads. These clips are stock footage from Pexels (free licence, no attribution required; each is marked with its source in `lib/data.ts`) and are the only content not from the live site. To add or replace one (ideally with Jnros' own footage), with ffmpeg installed:
 
 ```bash
 node scripts/encode-video.mjs path/to/source.mp4 my-clip --start 2 --end 14 --fade 1
 ```
 
 This writes `public/videos/my-clip-1080.mp4` and `-720.mp4` (H.264, no audio, index at the front so playback starts while it downloads) and the poster `public/images/my-clip-poster.jpg`; then use `clip("my-clip", "alt text")` in `lib/data.ts`. `--fade` dissolves the end back into the start for a seamless loop; leave it out when the loop point is a cut. Keep loops around 10–14s: each 1080p second is about 0.5 MB. `LoopVideo` downloads a clip only once it is on screen and the page is idle, fades it in once it is actually playing (the poster shows until then), pauses it off-screen, and serves phones the 720p file. Reduced motion, Save-Data and 2G connections keep the poster.
+
+**Chat assistant and back to top.** The bottom-right corner of every page has a back-to-top button (it appears after a screen of scrolling; its ring fills with reading progress) and a chat launcher. The assistant is scripted, not AI (`lib/assistant.ts`): quick replies and typed questions are matched by keyword to a solution or service, the contact details, a quote request or the lists of offerings, and answered with the site's own text and a link. Questions it can't place open WhatsApp with the question already typed in. Add words to `aliases` there to teach it new phrasings.
+
+**Logo.** `public/brand/jnros-logo.png` is the supplied logo with its white background removed; `jnros-logo-light.png` is a white knockout of it, shown in the header while it is over a dark hero.
 
 **Old URLs.** `next.config.ts` permanently redirects the WordPress site's URLs (`/about-us`, `/contact-us`, `/odc-cargo-shipping`, …) to their new paths.
 

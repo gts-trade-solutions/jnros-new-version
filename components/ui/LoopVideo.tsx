@@ -8,18 +8,31 @@ import { cn } from "@/lib/utils";
 
 type Connection = { saveData?: boolean; effectiveType?: string };
 
+type Props = {
+  video: Video;
+  className?: string;
+  /**
+   * Slideshows: plays only while true, and from the start each time it comes back, so the slide
+   * opens on the frame its poster shows. Leave it out to play whenever the clip is on screen.
+   */
+  active?: boolean;
+};
+
 /**
- * Muted background loop, laid over its poster (put it inside a ParallaxImage of video.poster, so
- * the first paint is a photo and never waits on video).
+ * Muted background loop, laid over its poster (put it inside a ParallaxImage or next to an Image of
+ * video.poster, so the first paint is a photo and never waits on video).
  *
- * Nothing downloads until the clip is near the viewport and the page is idle. It fades in once
- * frames are actually playing, so a slow start shows the poster instead of a blank or a spinner,
- * and pauses off-screen. Phones get the 720p file, larger screens 1080p. Reduced motion, Save-Data
- * and 2G connections keep the poster only.
+ * Nothing downloads until the clip is near the viewport, active and the page is idle. It fades in
+ * once frames are actually playing, so a slow start shows the poster instead of a blank or a
+ * spinner, and pauses off-screen. Phones get the 720p file, larger screens 1080p. Reduced motion,
+ * Save-Data and 2G connections keep the poster only.
  */
-export function LoopVideo({ video, className }: { video: Video; className?: string }) {
+export function LoopVideo({ video, className, active = true }: Props) {
   const ref = useRef<HTMLVideoElement>(null);
+  const [allowed, setAllowed] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const wasActive = useRef(active);
 
   useEffect(() => {
     const el = ref.current;
@@ -29,21 +42,23 @@ export function LoopVideo({ video, className }: { video: Video; className?: stri
 
     // React sets `muted` as a property only, and browsers allow autoplay only for muted video.
     el.muted = true;
-    let cancel: (() => void) | undefined;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        cancel?.();
-        if (entry.isIntersecting) cancel = whenIdle(() => el.play().catch(() => {}));
-        else el.pause();
-      },
-      { rootMargin: "200px 0px" },
-    );
+    setAllowed(true);
+    const io = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { rootMargin: "200px 0px" });
     io.observe(el);
-    return () => {
-      io.disconnect();
-      cancel?.();
-    };
+    return () => io.disconnect();
   }, []);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !allowed) return;
+    if (active && !wasActive.current) el.currentTime = 0;
+    wasActive.current = active;
+    if (!visible || !active) {
+      el.pause();
+      return;
+    }
+    return whenIdle(() => el.play().catch(() => {}));
+  }, [allowed, visible, active]);
 
   return (
     <video
