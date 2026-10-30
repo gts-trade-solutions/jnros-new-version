@@ -76,7 +76,7 @@ export function answer(question: string): ChatReply {
     };
   }
   if (has(text, ["contact", "phone", "call", "number", "email", "mail", "address", "office", "location", "located", "where are you", "reach you", "whatsapp"])) {
-    return { text: `Call ${site.phone}, email ${site.email}, or visit us at ${site.address.lines.join(", ")}.`, links: contactLinks };
+    return { text: `Call ${site.phone}, email ${site.email}, or visit us at ${site.address.lines.map((line) => line.replace(/,$/, "")).join(", ")}.`, links: contactLinks };
   }
   if (offering) {
     return {
