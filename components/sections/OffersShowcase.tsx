@@ -92,7 +92,7 @@ export function OffersShowcase({ items, total }: { items: Offering[]; total: num
             <motion.div key={item.slug} exit={{ opacity: 0, y: -12, transition: { duration: 0.25 } }}>
               <span className="block overflow-hidden">
                 <motion.span
-                  className="inline-block rounded-xs bg-bg/70 px-2.5 py-1.5 font-mono text-label uppercase text-accent backdrop-blur-sm"
+                  className="inline-block rounded-xs bg-bg/70 px-2.5 py-1.5 font-mono text-label text-accent backdrop-blur-sm"
                   initial={{ y: "110%" }}
                   animate={{ y: "0%" }}
                   transition={{ duration: 0.7, ease: EASE, delay: 0.25 }}

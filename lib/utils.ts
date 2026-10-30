@@ -1,6 +1,17 @@
+import { site } from "./data";
+
 /** Joins class names, skipping falsy values. */
 export function cn(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(" ");
+}
+
+/**
+ * Labels and headings are set in uppercase, but the company name keeps its own case: "Jnros
+ * Logistics", never "JNROS LOGISTICS". Use this in place of `uppercase` on any label or heading
+ * that may hold the name; text that contains it is shown as written.
+ */
+export function textCase(text: unknown) {
+  return typeof text === "string" && text.includes(site.name) ? "normal-case" : "uppercase";
 }
 
 /** "01", "02" … for numbered labels. */

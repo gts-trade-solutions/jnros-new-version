@@ -4,7 +4,7 @@ import { createElement, Fragment, useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { onceInView, prefersReducedMotion } from "@/lib/inview";
 import { DURATION, STAGGER } from "@/lib/motion";
-import { cn } from "@/lib/utils";
+import { cn, textCase } from "@/lib/utils";
 
 type Props = {
   text: string;
@@ -56,7 +56,7 @@ export function SplitText({ text, as = "h2", className, id, trigger = "scroll", 
     {
       ref,
       id,
-      className,
+      className: cn(textCase(text), className),
       ...(load ? { style: { "--hero-delay": `${delay}s`, "--hero-stagger": `${stagger}s` } as React.CSSProperties } : { "data-split": "" }),
     },
     lines.map((line, li) => (

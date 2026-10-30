@@ -5,7 +5,7 @@ import { Magnetic } from "@/components/ui/Magnetic";
 import { Reveal } from "@/components/ui/Reveal";
 import { SocialIcon } from "@/components/ui/SocialIcon";
 import { footerColumns, site } from "@/lib/data";
-import { telHref } from "@/lib/utils";
+import { cn, telHref, textCase } from "@/lib/utils";
 import { FooterTransit } from "./FooterTransit";
 
 /** Site footer. Columns rise in as it scrolls into view; links nudge right behind a green tick on hover. */
@@ -43,7 +43,7 @@ export function Footer() {
         <nav aria-label="Footer" className="grid gap-12 sm:grid-cols-2 lg:col-span-5">
           {footerColumns.map((col) => (
             <div key={col.title}>
-              <h2 className="font-mono text-label font-normal text-muted">{col.title}</h2>
+              <h2 className={cn("font-mono text-label font-normal text-muted", textCase(col.title))}>{col.title}</h2>
               <ul className="mt-6 space-y-2.5">
                 {col.links.map((link) => (
                   <li key={link.href}>

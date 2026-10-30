@@ -55,8 +55,10 @@ export const site = {
   phone: "+91 96202 32321",
   email: "nesan.kumar@jnroslogistics.com",
   address: {
-    lines: ["G006 Aditya Sunshine, Chickkabanaswadi Main Road", "Opp to CMR Law College, Kalyanagar Post", "Bangalore - 560043"],
-    street: "G006 Aditya Sunshine, Chickkabanaswadi Main Road, Opp to CMR Law College, Kalyanagar Post",
+    lines: ["MS Plaza", "OMBR Layout, Kasturi Nagar", "5M-627, 2nd Floor, Cabin No. 72", "Bangalore - 560043, India"],
+    /** Short form for the header's utility bar. */
+    short: "Bangalore - 560043",
+    street: "MS Plaza, OMBR Layout, Kasturi Nagar, 5M-627, 2nd Floor, Cabin No. 72",
     city: "Bangalore",
     postalCode: "560043",
     country: "IN",

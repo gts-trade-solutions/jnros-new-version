@@ -90,7 +90,7 @@ export function ChatAssistant() {
                 <MessageCircle className="size-5" />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="font-display text-lg font-bold uppercase leading-tight tracking-[0.04em]">{site.name}</p>
+                <p className="font-display text-lg font-bold leading-tight tracking-[0.04em]">{site.name}</p>
                 <p className="flex items-center gap-1.5 text-xs text-muted">
                   <span aria-hidden="true" className="size-1.5 rounded-full bg-accent" />
                   Ask about our solutions and services

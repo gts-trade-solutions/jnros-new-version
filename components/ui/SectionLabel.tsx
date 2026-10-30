@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, textCase } from "@/lib/utils";
 
 /**
  * Small mono label that opens most sections: "01 / INDUSTRIAL SERVICES".
@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
  */
 export function SectionLabel({ index, children, className }: { index?: string; children: React.ReactNode; className?: string }) {
   return (
-    <p className={cn("flex items-center gap-3 font-mono text-label uppercase text-muted", className)}>
+    <p className={cn("flex items-center gap-3 font-mono text-label text-muted", textCase(children), className)}>
       <span aria-hidden="true" className="hazard inline-block h-2.5 w-4 rounded-[1px]" />
       {index && (
         <>

@@ -69,7 +69,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SmoothScroll>
           <PageTransition>
             <ScrollProgress />
-            <Header nav={nav} phone={site.phone} email={site.email} location={site.address.lines[2]} socials={site.socials} />
+            <Header nav={nav} phone={site.phone} email={site.email} location={site.address.short} socials={site.socials} />
             <main id="main">{children}</main>
             {/* Own hydration unit: the footer is never needed on the first frame. */}
             <Suspense>

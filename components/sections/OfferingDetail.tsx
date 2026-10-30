@@ -9,7 +9,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { RevealImage } from "@/components/ui/RevealImage";
 import { type Offering, site } from "@/lib/data";
 import { breadcrumbJsonLd, offeringJsonLd } from "@/lib/seo";
-import { cn, telHref } from "@/lib/utils";
+import { cn, telHref, textCase } from "@/lib/utils";
 
 type Props = {
   item: Offering;
@@ -59,7 +59,7 @@ export function OfferingDetail({ item, all, kind, parent }: Props) {
           <aside className="lg:col-span-4 lg:col-start-9">
             <RevealImage image={item.image} sizes="(min-width: 1024px) 33vw, 100vw" className="aspect-[4/3] rounded-xs" />
             <nav aria-label={parent.label} className="mt-10">
-              <p className="font-mono text-label uppercase text-muted">{parent.label}</p>
+              <p className={cn("font-mono text-label text-muted", textCase(parent.label))}>{parent.label}</p>
               <ul className="mt-4 border-t border-border">
                 {all.map((o) => (
                   <li key={o.slug} className="border-b border-border">

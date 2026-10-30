@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useState } from "react";
 import type { NavItem } from "@/lib/data";
 import { EASE, STAGGER } from "@/lib/motion";
-import { cn, pad2 } from "@/lib/utils";
+import { cn, pad2, textCase } from "@/lib/utils";
 
 /** Items rise in at 40ms intervals once the panel has started opening. */
 const list: Variants = {
@@ -90,7 +90,7 @@ function MegaContent({ mega }: { mega: NonNullable<NavItem["mega"]> }) {
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.35, ease: EASE }}
             >
-              <p className="font-mono text-label uppercase text-accent">{link ? `${pad2((active ?? 0) + 1)} / ${mega.eyebrow}` : mega.eyebrow}</p>
+              <p className={cn("font-mono text-label text-accent", textCase(mega.eyebrow))}>{link ?`${pad2((active ?? 0) + 1)} / ${mega.eyebrow}` : mega.eyebrow}</p>
               <p className="mt-3 font-display text-h3 font-extrabold uppercase">{link?.label ?? mega.headline}</p>
               <p className="mt-3 line-clamp-3 max-w-md text-sm text-text/75">{link?.description ?? mega.description}</p>
             </motion.div>

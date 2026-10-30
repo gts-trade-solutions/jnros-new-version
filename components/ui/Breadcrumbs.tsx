@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { breadcrumbJsonLd } from "@/lib/seo";
+import { cn, textCase } from "@/lib/utils";
 import { JsonLd } from "./JsonLd";
 
 export type Crumb = { label: string; href: string };
@@ -10,11 +11,11 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
   return (
     <>
       <nav aria-label="Breadcrumb">
-        <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-label uppercase text-muted">
+        <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-label text-muted">
           {trail.map((crumb, i) => {
             const last = i === trail.length - 1;
             return (
-              <li key={crumb.href} className="flex items-center gap-2">
+              <li key={crumb.href} className={cn("flex items-center gap-2", textCase(crumb.label))}>
                 {last ? (
                   <span aria-current="page" className="text-text">
                     {crumb.label}
